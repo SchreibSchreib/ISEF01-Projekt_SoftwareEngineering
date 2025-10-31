@@ -5,7 +5,7 @@ const message = ref('Noch keine Nachricht');
 
 const getMessage = async () => {
   try {
-    const res = await fetch('http://localhost:8080/api/hello'); // Spring Boot Endpunkt
+    const res = await fetch('/api/hello'); // Spring Boot Endpunkt
     if (!res.ok) throw new Error('Fehler beim Abrufen vom Backend');
     const text = await res.text();
     message.value = text;
