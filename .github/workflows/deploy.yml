@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ "main" ]   # oder euer Branch
+    branches: [ "master" ]
 
 jobs:
   deploy:
