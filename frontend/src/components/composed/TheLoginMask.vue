@@ -29,7 +29,7 @@ function goToMainPage() {
 
 </script>
 
-<style scored>
+<style scoped>
 .login-container {
     background-color: #FFFFFF;
 }

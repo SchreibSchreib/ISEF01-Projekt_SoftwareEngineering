@@ -1,11 +1,11 @@
 <template>
   <div class="d-flex flex-column min-vh-100">
-    <header  class="sticky-top">
+    <header>
       <TheNavigationBar v-if="!route.meta.hideNavbar" />
     </header>
 
     <main>
-        <router-view />
+      <router-view />
     </main>
 
     <footer class="mt-auto">
