@@ -10,16 +10,22 @@
             <LoginPassword class="rounded-4"></LoginPassword>
         </div>
         <div class="d-flex justify-content-center">
-            <AppButton class="fs-4 fw-bold rounded-4">Weiter</AppButton>
+            <AppButton class="fs-4 fw-bold rounded-4" @click="goToMainPage">Weiter
+            </AppButton>
         </div>
     </div>
 
 </template>
 
 <script setup>
+import router from '@/router';
 import AppButton from '../base/AppButton.vue';
 import LoginInput from '../base/LoginInput.vue';
 import LoginPassword from '../base/LoginPassword.vue';
+
+function goToMainPage() {
+    router.push({ name: 'dashboard' });
+}
 
 </script>
 
