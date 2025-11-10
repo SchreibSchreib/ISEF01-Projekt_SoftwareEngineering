@@ -1,5 +1,5 @@
 <template>
-  <!-- 🔹 Navbar für kleine Bildschirme (Topbar) -->
+  <!-- 🔹 Navbar für kleine Bildschirme) -->
   <nav class="navbar navbar-expand-lg d-md-none fixed-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -41,26 +41,39 @@
     </div>
   </nav>
 
-  <!-- 🔹 Fixierte Sidebar -->
+  <!-- 🔹 Fixierte Sidebar für große Bildschirme -->
   <nav class="navbar navbar-expand-md flex-column vh-100 position-fixed d-none d-md-flex  ">
-    <div class="container-fluid flex-column">
-      <a class="navbar-brand mb-4" href="#">Meine App</a>
-      <ul class="navbar-nav flex-column w-100">
-        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+    <div class="container-fluid flex-column pe-0">
+      <ul class="navbar-nav flex-column w-100 ">
+        <li class="nav-item d-flex justify-content-end pt-5">
+          <NavbarButton>Dashboard</NavbarButton>
+        </li>
+        <li class="nav-item">
+          <NavbarButton>Dashboard</NavbarButton>
+        </li>
+        <li class="nav-item">
+          <NavbarButton>Dashboard</NavbarButton>
+        </li>
+        <li class="nav-item">
+          <NavbarButton>Dashboard</NavbarButton>
+        </li>
+        <li class="nav-item">
+          <NavbarButton>Dashboard</NavbarButton>
+        </li>
       </ul>
     </div>
   </nav>
 
 </template>
 
-<script>
-
+<script setup>
+import NavbarButton from '@/components/base/NavbarButton.vue';
 </script>
 
 <style scoped>
 .navbar {
   background-color: #264352;
+  min-width: 250px;
 }
 
 .content {
