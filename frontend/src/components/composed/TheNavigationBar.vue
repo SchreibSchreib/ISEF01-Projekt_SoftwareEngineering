@@ -1,64 +1,63 @@
 <template>
   <!-- 🔹 Navbar für kleine Bildschirme) -->
-  <nav class="navbar navbar-expand-lg d-md-none fixed-top">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg d-md-none fixed-top py-0 border-0 shadow-none">
+    <div class="container-fluid px-0">
+      <button class="navbar-toggler m-2" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Meine App</a>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+      <div class="collapse navbar-collapse bg-body align-content-start" id="navbarSupportedContent">
+        <div class="container-nav d-inline-flex px-0 mx-0">
+          <ul class="navbar-nav ps-2">
+            <li class="nav-item">
+              <NavbarButton icon="gauge">Dashboard</NavbarButton>
+            </li>
+            <li class="nav-item">
+              <NavbarButton icon="graduation-cap">Quiz starten</NavbarButton>
+            </li>
+            <li class="nav-item">
+              <NavbarButton icon="heart-handshake">Kooperation</NavbarButton>
+            </li>
+            <li class="nav-item">
+              <NavbarButton icon="book-copy">Fragenkatalog</NavbarButton>
+            </li>
+            <li class="nav-item">
+              <NavbarButton icon="bot">Team</NavbarButton>
+            </li>
+            <li class="nav-item ">
+              <NavbarButton icon="settings">Profil/Einstellungen</NavbarButton>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
 
   <!-- 🔹 Fixierte Sidebar für große Bildschirme -->
   <nav class="navbar navbar-expand-md flex-column vh-100 position-fixed d-none d-md-flex  ">
-    <div class="container-fluid flex-column pe-0">
-      <ul class="navbar-nav flex-column w-100 ">
-        <li class="nav-item d-flex justify-content-end pt-5">
-          <NavbarButton>Dashboard</NavbarButton>
+    <div class="container-fluid flex-column h-100 pt-5 pb-5 pe-0">
+      <ul class="navbar-nav flex-column ps-3 w-100 h-100">
+        <li class="nav-item pt-5">
+          <NavbarButton icon="gauge">
+            Dashboard
+          </NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton>Dashboard</NavbarButton>
+          <NavbarButton icon="graduation-cap">Quiz starten</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton>Dashboard</NavbarButton>
+          <NavbarButton icon="heart-handshake">Kooperation</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton>Dashboard</NavbarButton>
+          <NavbarButton icon="book-copy">Fragenkatalog</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton>Dashboard</NavbarButton>
+          <NavbarButton icon="bot">Team</NavbarButton>
+        </li>
+        <li class="nav-item mt-auto mb-5">
+          <NavbarButton icon="settings">Profil/Einstellungen</NavbarButton>
         </li>
       </ul>
     </div>
@@ -71,6 +70,10 @@ import NavbarButton from '@/components/base/NavbarButton.vue';
 </script>
 
 <style scoped>
+.container-nav {
+  background-color: #264352;
+}
+
 .navbar {
   background-color: #264352;
   min-width: 250px;

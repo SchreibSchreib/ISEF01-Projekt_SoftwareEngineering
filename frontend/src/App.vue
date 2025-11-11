@@ -4,7 +4,7 @@
       <TheNavigationBar v-if="!route.meta.hideNavbar" />
     </header>
 
-    <main>
+    <main class="mx-1">
       <router-view />
     </main>
 
