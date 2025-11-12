@@ -11,7 +11,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public boolean validateUser(String name, String passwort) {
-        return userRepository.findByUsernameAndPassword(name, passwort).isPresent();
+        return userRepository.findByNameAndPasswort(name, passwort).isPresent();
     }
 }
 
