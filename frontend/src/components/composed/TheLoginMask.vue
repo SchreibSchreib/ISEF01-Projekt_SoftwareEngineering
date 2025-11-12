@@ -4,27 +4,55 @@
         <img src="@/assets/circle-user-round.png" class="img-fluid d-block mx-auto mb-2 w-50">
         <p class="login-text text-center fs-1 fw-bold">Anmelden</p>
         <div class="pb-3">
-            <LoginInput class="rounded-4"></LoginInput>
+            <LoginInput v-model="name" placeholder="Benutzername" class="rounded-4" />
         </div>
+
         <div class="pb-5">
-            <LoginPassword class="rounded-4"></LoginPassword>
+            <LoginPassword v-model="password" placeholder="Passwort" class="rounded-4" />
         </div>
+
         <div class="d-flex justify-content-center">
-            <AppButton class="fs-4 fw-bold rounded-4" @click="goToMainPage">Weiter
-            </AppButton>
+            <AppButton class="fs-4 fw-bold rounded-4" @click="handleLogin">Login</AppButton>
+            <p v-if="errorMessage" class="text-danger text-center mt-3">
+                {{ errorMessage }}
+            </p>
         </div>
     </div>
 
 </template>
 
 <script setup>
-import router from '@/router';
+import { ref } from 'vue'
+import router from '@/router'
 import AppButton from '../base/AppButton.vue';
 import LoginInput from '../base/LoginInput.vue';
 import LoginPassword from '../base/LoginPassword.vue';
 
-function goToMainPage() {
-    router.push({ name: 'dashboard' });
+const name = ref('')
+const password = ref('')
+const errorMessage = ref('')
+
+async function handleLogin() {
+  try {
+    const response = await fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.value, passwort: password.value }),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      console.log(data.message)
+      localStorage.setItem('username', name.value)
+      router.push({ name: 'dashboard' })
+    } else {
+      const error = await response.json()
+      errorMessage.value = error.message || 'Anmeldung fehlgeschlagen.'
+    }
+  } catch (err) {
+    console.error(err)
+    errorMessage.value = 'Server nicht erreichbar.'
+  }
 }
 
 </script>

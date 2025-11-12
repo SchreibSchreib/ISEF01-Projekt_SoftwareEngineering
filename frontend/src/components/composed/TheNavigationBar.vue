@@ -75,8 +75,7 @@ import NavbarButton from '@/components/base/NavbarButton.vue';
 }
 
 .navbar {
-  background-color: #264352;
-  min-width: 250px;
+  background-color: #264352;;
 }
 
 .content {
