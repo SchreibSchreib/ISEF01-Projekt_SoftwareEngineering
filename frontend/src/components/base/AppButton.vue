@@ -10,8 +10,8 @@
 
 <style scoped>
 .btn-primary {
-    background-color: #264352;
-    border-color: #264352;
+    background-color: #3B5B69;
+    border-color: #3B5B69;
 }
 
 button:focus,
