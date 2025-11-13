@@ -12,20 +12,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // CSRF deaktivieren (für APIs notwendig)
+                // CSRF deaktivieren (für APIs wichtig)
                 .csrf(csrf -> csrf.disable())
 
-                // Session-basierte/Form-Logins
+                // Form-Login komplett abschalten
                 .formLogin(form -> form.disable())
+
+                // Basic Auth komplett abschalten
                 .httpBasic(basic -> basic.disable())
 
-                // Autorisierung festlegen
+                // Logout komplett abschalten (sonst bleibt Login-Filter aktiv)
+                .logout(logout -> logout.disable())
+
+                // Autorisierung – alles erlauben
                 .authorizeHttpRequests(auth -> auth
-                        // Login-Route erlauben
                         .requestMatchers("/api/login").permitAll()
-                        // Weitere API-Endpunkte habt: auch freigeben
                         .requestMatchers("/api/**").permitAll()
-                        // alles andere auch erlauben
                         .anyRequest().permitAll()
                 );
 
