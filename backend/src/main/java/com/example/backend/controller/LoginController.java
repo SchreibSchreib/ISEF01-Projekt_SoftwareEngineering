@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -18,14 +19,16 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest http) {
         boolean valid = userService.validateUser(request.getName(), request.getPasswort());
 
         if (valid) {
+            http.getSession(true).setAttribute("user", request.getName());
+
             return ResponseEntity.ok(Map.of("message", "Login erfolgreich"));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                 .body(Map.of("message", "Ungültige Anmeldedaten"));
+                    .body(Map.of("message", "Ungültige Anmeldedaten"));
         }
     }
 }

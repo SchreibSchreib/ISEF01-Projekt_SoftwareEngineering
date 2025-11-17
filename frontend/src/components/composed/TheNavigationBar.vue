@@ -7,9 +7,8 @@
         aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
-      <div class="collapse navbar-collapse bg-body align-content-start" id="navbarSupportedContent">
-        <div class="container-nav d-inline-flex px-0 mx-0">
+      <div class="collapse navbar-collapse small-collapse" id="navbarSupportedContent">
+        <div class="container-nav px-0 mx-0">
           <ul class="navbar-nav ps-2">
             <li class="nav-item">
               <NavbarButton icon="gauge">Dashboard</NavbarButton>
@@ -71,11 +70,31 @@ import NavbarButton from '@/components/base/NavbarButton.vue';
 
 <style scoped>
 .container-nav {
-  background-color: #264352;
+  background-color: #264352;;
 }
 
 .navbar {
-  background-color: #264352;;
+  background-color: #264352;
+}
+
+.small-collapse {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  width: auto !important;
+  max-width: fit-content !important;
+
+  background-color: inherit;
+  z-index: 1000;
+}
+
+.small-collapse .navbar-nav {
+  text-align: left;
+}
+
+.container-nav {
+  display: block !important;
 }
 
 .content {

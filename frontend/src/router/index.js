@@ -17,6 +17,10 @@ const router = createRouter({
       component: DashboardView,
       meta: { hideNavbar: false },
     },
+        {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
+    }
   ],
 });
 
