@@ -11,22 +11,22 @@
         <div class="container-nav px-0 mx-0">
           <ul class="navbar-nav ps-2">
             <li class="nav-item">
-              <NavbarButton icon="gauge">Dashboard</NavbarButton>
+              <NavbarButton icon="gauge" to="dashboard">Dashboard</NavbarButton>
             </li>
             <li class="nav-item">
-              <NavbarButton icon="graduation-cap">Quiz starten</NavbarButton>
+              <NavbarButton icon="graduation-cap" to="startquiz">Quiz starten</NavbarButton>
             </li>
             <li class="nav-item">
-              <NavbarButton icon="heart-handshake">Kooperation</NavbarButton>
+              <NavbarButton icon="heart-handshake" to="cooperate">Kooperation</NavbarButton>
             </li>
             <li class="nav-item">
-              <NavbarButton icon="book-copy">Fragenkatalog</NavbarButton>
+              <NavbarButton icon="book-copy" to="questions">Fragenkatalog</NavbarButton>
             </li>
             <li class="nav-item">
-              <NavbarButton icon="bot">Team</NavbarButton>
+              <NavbarButton icon="bot" to="team">Team</NavbarButton>
             </li>
             <li class="nav-item ">
-              <NavbarButton icon="settings">Profil/Einstellungen</NavbarButton>
+              <NavbarButton icon="settings" to="settings">Profil/Einstellungen</NavbarButton>
             </li>
           </ul>
         </div>
@@ -39,24 +39,22 @@
     <div class="container-fluid flex-column h-100 pt-5 pb-5 pe-0">
       <ul class="navbar-nav flex-column ps-3 w-100 h-100">
         <li class="nav-item pt-5">
-          <NavbarButton icon="gauge">
-            Dashboard
-          </NavbarButton>
+          <NavbarButton icon="gauge" to="dashboard">Dashboard</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton icon="graduation-cap">Quiz starten</NavbarButton>
+          <NavbarButton icon="graduation-cap" to="startquiz">Quiz starten</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton icon="heart-handshake">Kooperation</NavbarButton>
+          <NavbarButton icon="heart-handshake" to="cooperate">Kooperation</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton icon="book-copy">Fragenkatalog</NavbarButton>
+          <NavbarButton icon="book-copy" to="questions">Fragenkatalog</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton icon="bot">Team</NavbarButton>
+          <NavbarButton icon="bot" to="team">Team</NavbarButton>
         </li>
         <li class="nav-item mt-auto mb-5">
-          <NavbarButton icon="settings">Profil/Einstellungen</NavbarButton>
+          <NavbarButton icon="settings" to="settings">Profil/Einstellungen</NavbarButton>
         </li>
       </ul>
     </div>
@@ -70,7 +68,8 @@ import NavbarButton from '@/components/base/NavbarButton.vue';
 
 <style scoped>
 .container-nav {
-  background-color: #264352;;
+  background-color: #264352;
+  ;
 }
 
 .navbar {

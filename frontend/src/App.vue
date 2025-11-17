@@ -5,7 +5,7 @@
         <TheNavigationBar v-if="!route.meta.hideNavbar" />
       </header>
       <div class="col d-flex flex-column p-0">
-        <main class="flex-grow-1 p-4 p-md-5 overflow-auto d-md-none "
+        <main class="flex-grow-1 p-4 p-md-5 overflow-auto d-md-none min-vh-100"
           :style="route.meta.hideNavbar ? '' : 'margin-top: 56px;'">
           <router-view />
         </main>
