@@ -29,5 +29,6 @@ const route = useRoute();
 <style scoped>
 main {
   overflow-y: auto;
+  background-color: #F2F4F5;
 }
 </style>
