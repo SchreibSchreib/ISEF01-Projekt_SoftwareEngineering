@@ -4,6 +4,7 @@ import com.example.backend.models.Question;
 import com.example.backend.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,5 +29,19 @@ public class QuestionService {
     public Question getQuestionById(long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found: " + questionId));
+    }
+
+    /**
+     * Anzahl zufälliger Fragen laden.
+     */
+    public List<Question> getRandomQuestions(int count) {
+        List<Question> allQuestions = questionRepository.findAll();
+
+        Collections.shuffle(allQuestions);
+
+        return allQuestions
+                .stream()
+                .limit(count)
+                .toList();
     }
 }

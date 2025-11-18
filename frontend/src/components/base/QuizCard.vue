@@ -1,13 +1,25 @@
 <template lang="">
-<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-<div class="card-header">Header</div>
-    <div class="card-body">
-        <h5 class="card-title">Primary card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  <div class="container d-flex justify-content-center py-5">
+    <div class="card w-100 mb-3 rounded-5 shadow-lg" style="max-width: 800px;">
+      <div class="card-header rounded-top-5">
+        <slot name="header"></slot>
+      </div>
+      <div class="card-body rounded-bottom-5">
+        <slot name="body"></slot>
+      </div>
     </div>
-    </div>
+  </div>
 </template>
 <script setup>
 
 </script>
-<style scoped></style>
+<style scoped>
+.card-header {
+    background-color: #4BA1B1;
+    color: #FFFFFF;
+}
+
+.card-body {
+    background-color: #FFFFFF;
+}
+</style>

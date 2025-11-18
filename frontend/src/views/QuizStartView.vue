@@ -1,18 +1,19 @@
 <template>
-
-    <div class="container py-4 ">
-        <h1 class="mb-4">Hallo StudentXY!</h1>
-
-        <div class="row g-4">
-            <QuizCard/>
+    <div class="container py-4">
+        <h1 class="mb-4 pb-5">Hallo StudentXY!</h1>
+        <div class="d-flex justify-content-center mt-5">
+            <div class="col-12 col-sm-11 col-md-11 col-lg-10">
+                <TheNewGameCard />
+            </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue';
 import router from '@/router';
-import QuizCard from '@/components/base/QuizCard.vue';
+import TheNewGameCard from '@/components/composed/TheNewGameCard.vue';
 
 onMounted(async () => {
     const response = await fetch('/api/session/check', {
