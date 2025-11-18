@@ -17,19 +17,21 @@ public class User {
     @Column(name = "passwort", nullable = false)
     private String passwort;
 
-    @Column(name = "team_id")
-    private Long teamId;
+    // ⚠ NEU: statt Long teamId -> Beziehung zu Team
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")   // benutzt die Spalte team_id in der Tabelle
+    private Team team;
 
-    @Column(name = "userscore")
-    private Integer userscore;
+    @Column(name = "userscore", nullable = false)
+    private Integer userscore = 0;  // Standardwert
 
     // Konstruktoren
     public User() {}
 
-    public User(String name, String passwort, Long teamId, Integer userscore) {
+    public User(String name, String passwort, Team team, Integer userscore) {
         this.name = name;
         this.passwort = passwort;
-        this.teamId = teamId;
+        this.team = team;
         this.userscore = userscore;
     }
 
@@ -43,10 +45,9 @@ public class User {
     public String getPasswort() { return passwort; }
     public void setPasswort(String passwort) { this.passwort = passwort; }
 
-    public Long getTeamId() { return teamId; }
-    public void setTeamId(Long teamId) { this.teamId = teamId; }
+    public Team getTeam() { return team; }
+    public void setTeam(Team team) { this.team = team; }
 
     public Integer getUserscore() { return userscore; }
     public void setUserscore(Integer userscore) { this.userscore = userscore; }
 }
-
