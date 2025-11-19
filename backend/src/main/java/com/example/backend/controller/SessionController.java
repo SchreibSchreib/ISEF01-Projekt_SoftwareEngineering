@@ -15,13 +15,13 @@ public class SessionController {
 
         var session = request.getSession(false);
 
-        if (session == null || session.getAttribute("user") == null) {
+        if (session == null || session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body(Map.of("loggedIn", false));
         }
 
         return ResponseEntity.ok(Map.of(
             "loggedIn", true,
-            "username", session.getAttribute("user")
+            "userId", session.getAttribute("userId")
         ));
     }
 

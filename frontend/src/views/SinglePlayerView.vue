@@ -27,18 +27,16 @@
 
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3">
 
-    <div class="flex-grow-1">
-        <ExplainBox v-if="answered" :explanation="currentQuestion.explanation" />
-    </div>
+                        <div class="flex-grow-1">
+                            <ExplainBox v-if="answered" :explanation="currentQuestion.explanation" />
+                        </div>
 
-    <button class="btn border-3 rounded-3 px-4 py-2 fw-bold"
-            style="height: 50px; width: 150px;"
-            :disabled="!answered"
-            @click="nextQuestion">
-        {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
-    </button>
+                        <button class="btn border-3 rounded-3 px-4 py-2 fw-bold" style="height: 50px; width: 150px;"
+                            :disabled="!answered" @click="nextQuestion">
+                            {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
+                        </button>
 
-</div>
+                    </div>
                 </div>
             </template>
         </QuizCard>
@@ -126,12 +124,32 @@ function indexToLetter(index) {
 function nextQuestion() {
     if (isLastQuestion.value) {
         finished.value = true;
+
+        updateScore();
         return;
+
     }
 
     currentIndex.value++;
     selectedChoice.value = null;
     answered.value = false;
+}
+
+async function updateScore() {
+    const userId = localStorage.getItem("userId");
+    const points = score.value * 10;
+
+    try {
+        await fetch(`/api/users/${userId}/addScore?points=${points}`, {
+            method: "POST",
+            credentials: "include"
+        });
+
+        console.log("Score erfolgreich aktualisiert:", points);
+
+    } catch (err) {
+        console.error("Score konnte nicht aktualisiert werden:", err);
+    }
 }
 
 /* Restart */
@@ -145,7 +163,7 @@ function restart() {
 </script>
 
 <style scoped>
-    .btn {
-        border-color: #357c7c  !important;
-    }
+.btn {
+    border-color: #357c7c !important;
+}
 </style>

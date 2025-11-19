@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.LoginRequest;
+import com.example.backend.models.User;
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,13 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest http) {
-        boolean valid = userService.validateUser(request.getName(), request.getPasswort());
+        User user = userService.getUserByNameAndPassword(request.getName(), request.getPasswort());
 
-        if (valid) {
-            http.getSession(true).setAttribute("user", request.getName());
+        try {
+            http.getSession(true).setAttribute("userId", user.getUserId());
 
             return ResponseEntity.ok(Map.of("message", "Login erfolgreich"));
-        } else {
+        } catch (RuntimeException exception) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Ungültige Anmeldedaten"));
         }

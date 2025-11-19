@@ -1,23 +1,23 @@
 <template>
 
-    <div class="login-container text-muted rounded-4 border p-4 shadow">
-        <img src="@/assets/circle-user-round.png" class="img-fluid d-block mx-auto mb-2 w-50">
-        <p class="login-text text-center fs-1 fw-bold">Anmelden</p>
-        <div class="pb-3">
-            <LoginInput v-model="name" placeholder="Benutzername" class="rounded-4" />
-        </div>
-
-        <div class="pb-5">
-            <LoginPassword v-model="password" placeholder="Passwort" class="rounded-4" />
-        </div>
-
-        <div class="d-flex justify-content-center">
-            <AppButton class="fs-4 fw-bold rounded-4" @click="handleLogin">Login</AppButton>
-            <p v-if="errorMessage" class="text-danger text-center mt-3">
-                {{ errorMessage }}
-            </p>
-        </div>
+  <div class="login-container text-muted rounded-4 border p-4 shadow">
+    <img src="@/assets/circle-user-round.png" class="img-fluid d-block mx-auto mb-2 w-50">
+    <p class="login-text text-center fs-1 fw-bold">Anmelden</p>
+    <div class="pb-3">
+      <LoginInput v-model="name" placeholder="Benutzername" class="rounded-4" />
     </div>
+
+    <div class="pb-5">
+      <LoginPassword v-model="password" placeholder="Passwort" class="rounded-4" />
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <AppButton class="fs-4 fw-bold rounded-4" @click="handleLogin">Login</AppButton>
+      <p v-if="errorMessage" class="text-danger text-center mt-3">
+        {{ errorMessage }}
+      </p>
+    </div>
+  </div>
 
 </template>
 
@@ -42,10 +42,17 @@ async function handleLogin() {
     })
 
     if (response.ok) {
-      const data = await response.json()
-      console.log(data.message)
-      localStorage.setItem('username', name.value)
-      router.push({ name: 'dashboard' })
+      if (response.ok) {
+        await fetch("/api/session/check", { credentials: "include" })
+          .then(res => res.json())
+          .then(data => {
+            localStorage.setItem("userId", data.userId)
+            localStorage.setItem("username", data.username)
+          });
+
+        router.push({ name: "dashboard" })
+      }
+
     } else {
       const error = await response.json()
       errorMessage.value = error.message || 'Anmeldung fehlgeschlagen.'
@@ -60,10 +67,10 @@ async function handleLogin() {
 
 <style scoped>
 .login-container {
-    background-color: #FFFFFF;
+  background-color: #FFFFFF;
 }
 
 .login-text {
-    color: #264352;
+  color: #264352;
 }
 </style>

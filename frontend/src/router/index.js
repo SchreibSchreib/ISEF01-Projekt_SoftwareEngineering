@@ -17,25 +17,42 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: DashboardView,
-      meta: { hideNavbar: false },
+      meta: { hideNavbar: false, requiresAuth: true }
     },
     {
       path: "/startquiz",
       name: "startquiz",
       component: QuizStartView,
-      meta: { hideNavbar: false },
+      meta: { hideNavbar: false, requiresAuth: true }
     },
     {
       path: "/singleplayer",
       name: "singleplayer",
       component: SinglePlayerView,
-      meta: { hideNavbar: false },
+      meta: { hideNavbar: false, requiresAuth: true }
     },
     {
       path: "/:pathMatch(.*)*",
       redirect: "/",
     },
   ],
+});
+
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.requiresAuth) {
+    try {
+      const res = await fetch("/api/session/check", {
+        credentials: "include"
+      });
+
+      if (res.status === 401) {
+        return next({ name: "login" });
+      }
+    } catch (err) {
+      return next({ name: "login" });
+    }
+  }
+  next();
 });
 
 export default router;
