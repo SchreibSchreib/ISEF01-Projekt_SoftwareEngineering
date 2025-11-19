@@ -18,33 +18,32 @@
 
             <template #body>
                 <div class="d-flex flex-column gap-3">
+                    <QuizCardButton v-for="(choice, index) in currentQuestion.choices"
+                        :key="`${currentIndex}-${choice.id}-${index}`" :state="answerClass(choice)" :disabled="answered"
+                        @click="selectAnswer(choice)">
+                        <template #letter>{{ indexToLetter(index) }}</template>
+                        <template #answer>{{ choice.text }}</template>
+                    </QuizCardButton>
 
-                    <!-- Antwortoptionen mit Backend-Daten -->
-                    <button
-                        v-for="(choice, index) in currentQuestion.choices"
-                        :key="choice.id"
-                        class="answer-btn"
-                        :class="answerClass(choice)"
-                        :disabled="answered"
-                        @click="selectAnswer(choice)"
-                    >
-                        <strong>{{ indexToLetter(index) }}</strong>
-                        <span>{{ choice.text }}</span>
-                    </button>
+                    <div class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3">
 
-                    <div class="d-flex justify-content-end mt-4">
-                        <button class="btn btn-outline-primary px-4 py-2 fw-bold"
-                            :disabled="!answered"
-                            @click="nextQuestion">
-                            {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
-                        </button>
-                    </div>
+    <div class="flex-grow-1">
+        <ExplainBox v-if="answered" :explanation="currentQuestion.explanation" />
+    </div>
 
+    <button class="btn border-3 rounded-3 px-4 py-2 fw-bold"
+            style="height: 50px; width: 150px;"
+            :disabled="!answered"
+            @click="nextQuestion">
+        {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
+    </button>
+
+</div>
                 </div>
             </template>
         </QuizCard>
 
-        <!-- ERGEBNIS -->
+        <!-- Ergebnis -->
         <QuizCard v-else>
             <template #header>
                 <h4 class="mb-0">Dein Ergebnis</h4>
@@ -57,21 +56,23 @@
                         Du hast {{ score }} von {{ questions.length }} Fragen korrekt beantwortet.
                     </p>
 
-                    <button class="btn btn-primary px-4 py-2 fw-bold me-3" @click="restart">Nochmal spielen</button>
+                    <button class="btn btn-primary px-4 py-2 fw-bold me-3" @click="restart">
+                        Nochmal spielen
+                    </button>
                     <button class="btn btn-secondary px-4 py-2 fw-bold" @click="$router.push('/dashboard')">
                         Zurück zum Dashboard
                     </button>
                 </div>
             </template>
         </QuizCard>
-
     </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import QuizCard from "@/components/base/QuizCard.vue";
+import QuizCardButton from "@/components/base/QuizCardButton.vue";
+import ExplainBox from "@/components/base/ExplainBox.vue";
 
 const questions = ref([]);
 const loading = ref(true);
@@ -81,6 +82,7 @@ const finished = ref(false);
 onMounted(async () => {
     const response = await fetch("/api/questions/random/4");
     questions.value = await response.json();
+    console.log("RAW QUESTIONS:", JSON.stringify(questions.value, null, 2));
     loading.value = false;
 });
 
@@ -93,27 +95,26 @@ const score = ref(0);
 const currentQuestion = computed(() => questions.value[currentIndex.value]);
 const isLastQuestion = computed(() => currentIndex.value === questions.value.length - 1);
 
-/* Antwort wählen (Choice-Objekt!) */
+/* Antwort wählen */
 function selectAnswer(choice) {
     selectedChoice.value = choice;
     answered.value = true;
+    console.log("selectAnswer fired for", choice.text)
 
     if (choice.id === currentQuestion.value.correctChoice.id) {
         score.value++;
     }
 }
 
-/* Farben */
+/* Farben abhängig vom Zustand */
 function answerClass(choice) {
     if (!answered.value) return "neutral";
 
     if (choice.id === currentQuestion.value.correctChoice.id)
         return "correct";
 
-    if (selectedChoice.value?.id === choice.id)
-        return "wrong";
-
-    return "neutral";
+    // *** ALLE falschen Antworten rot ***
+    return "wrong";
 }
 
 /* A/B/C/D */
@@ -144,35 +145,7 @@ function restart() {
 </script>
 
 <style scoped>
-.answer-btn {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 18px;
-    border-radius: 20px;
-    border: 3px solid #0ca6b6;
-    background: white;
-    font-size: 1.2rem;
-    text-align: left;
-    width: 100%;
-    transition: 0.2s;
-}
-
-/* Hover */
-.answer-btn.neutral:hover {
-    background: #e9ffff;
-}
-
-/* Richtige Antwort */
-.correct {
-    background: #aaffdd !important;
-    border-color: #00aa55 !important;
-}
-
-/* Falsche */
-.wrong {
-    background: #ff9988 !important;
-    border-color: #cc0000 !important;
-}
+    .btn {
+        border-color: #357c7c  !important;
+    }
 </style>
-

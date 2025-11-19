@@ -5,14 +5,16 @@
         <TheNavigationBar v-if="!route.meta.hideNavbar" />
       </header>
       <div class="col d-flex flex-column p-0">
-        <main class="flex-grow-1 p-2 p-md-4 overflow-auto d-md-none min-vh-100">
+        <main v-if="isMobile" class="flex-grow-1 p-2 p-md-4 overflow-auto min-vh-100"
           :style="route.meta.hideNavbar ? '' : 'margin-top: 56px;'">
           <router-view />
         </main>
-        <main class="flex-grow-1 overflow-auto d-none d-md-block min-vh-100 "
+
+        <main v-else class="flex-grow-1 overflow-auto min-vh-100"
           :style="route.meta.hideNavbar ? '' : 'margin-left: 234px;'">
           <router-view />
         </main>
+
         <footer>
         </footer>
       </div>
@@ -22,8 +24,18 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
 import TheNavigationBar from './components/composed/TheNavigationBar.vue';
 const route = useRoute();
+const isMobile = ref(false);
+
+onMounted(() => {
+  const check = () => {
+    isMobile.value = window.innerWidth < 768;
+  };
+  check();
+  window.addEventListener("resize", check);
+});
 </script>
 
 <style scoped>
