@@ -1,9 +1,12 @@
 <template>
-    <input type="text" v-model="username" placeholder="Nutzername" class="form-control border-2 rounded-4 py-3"></input>
+    <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
+        class="form-control border-2 rounded-4 py-3" />
 </template>
 
 <script setup>
-
+defineProps({
+    modelValue: String,
+})
 </script>
 
 <style scoped>
