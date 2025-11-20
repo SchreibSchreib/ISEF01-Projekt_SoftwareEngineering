@@ -11,7 +11,7 @@
 </template>
 <script setup>
 
-import QuizCard from '../base/QuizCard.vue';
+import QuizCard from '../base/AppCard.vue';
 import AppButton from '../base/AppButton.vue';
 import router from '@/router';
 

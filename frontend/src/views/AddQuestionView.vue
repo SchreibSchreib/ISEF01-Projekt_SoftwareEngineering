@@ -4,70 +4,46 @@
 
         <div class="row g-4">
 
-            <!-- ======================================= -->
-            <!--  LINKER BEREICH: QUIZCARD              -->
-            <!-- ======================================= -->
+            <!--LINKER BEREICH: QUIZCARD-->
             <div class="col-12 col-lg-8">
-                <QuizCard>
+                <AppCard>
                     <template #header>
-                        <h3 class="text-center text-white mb-0">Fragenkatalog erweitern</h3>
+                        <h3 class="text-center text-white py-3 mb-0">Fragenkatalog erweitern</h3>
                     </template>
 
                     <template #body>
-                        <!-- Frage -->
-                        <div class="mb-3">
-                            <input 
-                                type="text"
-                                class="form-control input-style"
-                                placeholder="Neue Frage hier eingeben."
-                                v-model="question"
-                            />
+                        <div class="mb-4">
+                            <AppInput class="form-control input-style border-3 justify-content-center fs-3"
+                                placeholder="Neue Frage hier eingeben." v-model="newQuestion" />
                         </div>
 
                         <!-- Antwortfelder A–D -->
-                        <div class="mb-3" v-for="letter in ['A','B','C','D']" :key="letter">
-                            <input 
-                                type="text"
-                                class="form-control input-style"
-                                :placeholder="`Antwortmöglichkeit ${letter}`"
-                                v-model="choices[letter]"
-                            />
+                        <div class="mb-2" v-for="letter in ['A', 'B', 'C', 'D']" :key="letter">
+                            <AppInput class="form-control input-style border-3 fs-5"
+                                :placeholder="`Antwortmöglichkeit ${letter}`" v-model="choices[letter]" />
                         </div>
                     </template>
-                </QuizCard>
+                </AppCard>
             </div>
 
-            <!-- ======================================= -->
             <!--  RECHTER BEREICH: Antwort + Erklärung   -->
-            <!-- ======================================= -->
             <div class="col-12 col-lg-4 pt-0 pt-lg-5">
 
                 <!-- Korrekte Antwort -->
-                <div class="selector-box mb-4">
+                <AppBox :max="225" class="mb-4 mx-auto">
                     <p class="fw-bold text-center">Welche Antwort ist korrekt?</p>
 
-                    <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
-                        <button 
-                            v-for="letter in ['A','B','C','D']"
-                            :key="letter"
-                            class="btn btn-outline-info selector-btn"
-                            :class="{ activeBtn: correctAnswer === letter }"
-                            @click="correctAnswer = letter"
-                        >
-                            {{ letter }}
-                        </button>
+                    <div class="d-flex input-style flex-wrap justify-content-center gap-3 mt-3">
+                        <ChoiceButton v-for="letter in ['A', 'B', 'C', 'D']" :key="letter" :letter="letter"
+                            :active="correctAnswer === letter" @select="correctAnswer = $event" />
                     </div>
-                </div>
+                </AppBox>
 
                 <!-- Begründung -->
-                <div class="selector-box mb-4">
+                <div class=" mb-4">
                     <p class="fw-bold mb-1">Begründung</p>
-                    <textarea 
-                        class="form-control explanation-box"
-                        placeholder="Hier eingeben"
-                        rows="4"
-                        v-model="explanation"
-                    ></textarea>
+                    <AppInput class="form-control fs-5 border-3" placeholder="Hier eingeben" rows="4"
+                        v-model="explanation"></AppInput>
                 </div>
 
                 <!-- Speichern -->
@@ -82,17 +58,20 @@
 
 <script setup>
 import { ref } from "vue";
-import QuizCard from "@/components/base/QuizCard.vue";
+import AppCard from "@/components/base/AppCard.vue";
+import AppInput from "@/components/base/AppInput.vue";
+import AppBox from "@/components/base/AppBox.vue";
+import ChoiceButton from "@/components/base/AppChoiceButton.vue";
 
 // Formular-Daten
-const question = ref("");
+const newQuestion = ref("");
 const choices = ref({ A: "", B: "", C: "", D: "" });
 const correctAnswer = ref(null);
 const explanation = ref("");
 
 // später für API-Call
 function saveQuestion() {
-    console.log("Neue Frage:", question.value);
+    console.log("Neue Frage:", newQuestion.value);
     console.log("Antworten:", choices.value);
     console.log("Korrekt:", correctAnswer.value);
     console.log("Begründung:", explanation.value);
@@ -102,43 +81,6 @@ function saveQuestion() {
 <style scoped>
 /* Eingabefelder links */
 .input-style {
-    border: 3px solid #1fa1a8;
-    border-radius: 20px;
-    padding: 15px;
-    font-size: 1.1rem;
-}
-
-/* Boxen rechts */
-.selector-box {
-    border: 2px solid #1fa1a8;
-    border-radius: 20px;
-    padding: 20px;
-    background: white;
-}
-
-/* Antwort-Buttons */
-.selector-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-    border-radius: 12px;
-    border-width: 2px;
-}
-
-.activeBtn {
-    background-color: #1fa1a8 !important;
-    color: white !important;
-}
-
-/* Erklärung */
-.explanation-box {
-    border-radius: 15px;
-    border: 2px solid #1fa1a8;
-}
-
-/* Speichern */
-.save-btn {
-    border-radius: 15px;
-    font-size: 1.2rem;
+    border-color: #1fa1a8 !important;
 }
 </style>

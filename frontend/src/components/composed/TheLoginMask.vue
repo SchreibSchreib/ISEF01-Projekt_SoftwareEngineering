@@ -4,11 +4,11 @@
     <img src="@/assets/circle-user-round.png" class="img-fluid d-block mx-auto mb-2 w-50">
     <p class="login-text text-center fs-1 fw-bold">Anmelden</p>
     <div class="pb-3">
-      <LoginInput v-model="name" placeholder="Benutzername" class="rounded-4" />
+      <AppInput v-model="name" placeholder="Benutzername"/>
     </div>
 
     <div class="pb-5">
-      <LoginPassword v-model="password" placeholder="Passwort" class="rounded-4" />
+      <LoginPassword v-model="password" placeholder="Passwort"/>
     </div>
     <p v-if="errorMessage" class="text-danger text-center mt-3">
       {{ errorMessage }}
@@ -26,7 +26,7 @@
 import { ref } from 'vue'
 import router from '@/router'
 import AppButton from '../base/AppButton.vue';
-import LoginInput from '../base/LoginInput.vue';
+import AppInput from '../base/AppInput.vue';
 import LoginPassword from '../base/LoginPassword.vue';
 
 const name = ref('')

@@ -68,7 +68,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import QuizCard from "@/components/base/QuizCard.vue";
+import QuizCard from "@/components/base/AppCard.vue";
 import QuizCardButton from "@/components/base/QuizCardButton.vue";
 import ExplainBox from "@/components/base/ExplainBox.vue";
 

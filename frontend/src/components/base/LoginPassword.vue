@@ -1,5 +1,5 @@
 <template>
-    <input type="password" v-model="password" placeholder="Passwort" class="form-control border-2 rounded-3 "></input>
+    <input type="password" v-model="password" placeholder="Passwort" class="form-control border-2 rounded-4 py-3"></input>
 </template>
 
 <script setup>
