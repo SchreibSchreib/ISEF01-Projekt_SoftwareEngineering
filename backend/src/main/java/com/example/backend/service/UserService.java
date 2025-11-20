@@ -32,7 +32,7 @@ public class UserService {
      */
     public User getUserByNameAndPassword(String name, String passwort) {
         return userRepository.findByNameAndPasswort(name, passwort)
-                .orElseThrow(() -> new RuntimeException("Invalid credentials for user: " + name));
+                .orElse(null);
     }
 
     /**

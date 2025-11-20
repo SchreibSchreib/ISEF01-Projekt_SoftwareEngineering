@@ -10,12 +10,13 @@
     <div class="pb-5">
       <LoginPassword v-model="password" placeholder="Passwort" class="rounded-4" />
     </div>
-
+    <p v-if="errorMessage" class="text-danger text-center mt-3">
+      {{ errorMessage }}
+    </p>
     <div class="d-flex justify-content-center">
+
       <AppButton class="fs-4 fw-bold rounded-4" @click="handleLogin">Login</AppButton>
-      <p v-if="errorMessage" class="text-danger text-center mt-3">
-        {{ errorMessage }}
-      </p>
+
     </div>
   </div>
 
