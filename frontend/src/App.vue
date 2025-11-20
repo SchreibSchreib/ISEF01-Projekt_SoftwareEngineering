@@ -35,7 +35,7 @@ onMounted(() => {
   window.addEventListener("resize", update);
 });
 
-// Dynamischer Style für das <main>
+// Dynamischer Style für main
 const mainStyle = computed(() => {
   if (route.meta.hideNavbar) return '';
 
