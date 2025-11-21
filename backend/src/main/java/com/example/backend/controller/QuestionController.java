@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/questions")
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "*")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -27,5 +27,10 @@ public class QuestionController {
     @GetMapping("/{id}")
     public Question getQuestionById(@PathVariable long id) {
         return questionService.getQuestionById(id);
+    }
+    // Zufällige Fragen holen
+    @GetMapping("/random/{count}")
+    public List<Question> getRandomQuestions(@PathVariable int count) {
+        return questionService.getRandomQuestions(count);
     }
 }

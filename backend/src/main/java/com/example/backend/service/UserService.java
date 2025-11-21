@@ -15,7 +15,7 @@ public class UserService {
     private final TeamRepository teamRepository;
 
     public UserService(UserRepository userRepository,
-                       TeamRepository teamRepository) {
+            TeamRepository teamRepository) {
         this.userRepository = userRepository;
         this.teamRepository = teamRepository;
     }
@@ -25,6 +25,14 @@ public class UserService {
      */
     public boolean validateUser(String name, String passwort) {
         return userRepository.findByNameAndPasswort(name, passwort).isPresent();
+    }
+
+    /**
+     * User per Name und Passwort holen
+     */
+    public User getUserByNameAndPassword(String name, String passwort) {
+        return userRepository.findByNameAndPasswort(name, passwort)
+                .orElse(null);
     }
 
     /**
