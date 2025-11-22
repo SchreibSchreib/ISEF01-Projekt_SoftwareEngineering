@@ -28,4 +28,4 @@ jobs:
       - name: Deploy FRONTEND
         run: |
           ssh -o StrictHostKeyChecking=yes ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "bash -lc '/var/www/quiz/deploy-frontend.sh'"
+            "bash -lc '/opt/quizapp/deploy-frontend.sh'"
