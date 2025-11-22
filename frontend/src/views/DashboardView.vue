@@ -1,59 +1,49 @@
 <template>
 
-    <div class="container py-4 ">
-        <h1 class="mb-4">Hallo StudentXY!</h1>
+    <div class="container-fluid vh-100  py-4">
+        <div class="mb-5">
+        <h1>Hallo StudentXY!</h1>
+        </div>
 
-        <div class="row g-4">
+        <div class="row g-4 mt-5 align-items-start">
 
             <!-- LINKE SPALTE -->
-            <div class="col-12 col-lg-8 d-flex flex-column gap-4">
+            <div class="col-12 col-lg-6 d-flex px-4 flex-column gap-3">
 
 
-                <div class="card shadow-sm p-4">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-auto">
-                            <div class="progress-circle"></div>
-                        </div>
+                <AppBoxWithShadow class="shadow-sm text-center mt-4 mb-3">
+                    <p class="fs-4 m-0">Der Fragenkatalog beinhaltet momentan:</p>
+                    <p class="fs-5 fw-bold my-1">{{ }} Fragen</p>
+                </AppBoxWithShadow>
+                <AppBoxWithShadow class="shadow-sm text-center">
+                    <p class="fs-4 m-0">Dein Score:</p>
+                    <p class="fs-5 fw-bold my-1">{{ }} Puntke</p>
+                </AppBoxWithShadow>
 
-                        <div class="col">
-                            <h4>Lernfortschritt</h4>
-                            <p class="mb-0 text-muted">
-                                Herzlichen Glückwunsch! Du hast 100% erfolgreich beantwortet.
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="d-flex flex-wrap gap-3">
-                    <div class="card small-info-card shadow-sm p-3 flex-fill text-center">
-                        <strong>200 von 200 Fragen</strong>
-                    </div>
-                    <div class="card small-info-card shadow-sm p-3 flex-fill text-center">
-                        <strong>200 Punkte</strong>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-wrap gap-3">
-                    <button class="btn btn-outline-primary flex-fill py-3 fw-bold">
+                    <DashboardButton class="mt-lg-4 w-100">
                         Neue Fragen erstellen
-                    </button>
+                    </DashboardButton>
 
-                    <button class="btn btn-outline-primary flex-fill py-3 fw-bold">
+                    <DashboardButton class="flex-even">
                         Neues Quiz starten
-                    </button>
+                    </DashboardButton>
 
-                    <button class="btn btn-outline-primary flex-fill py-3 fw-bold">
-                        Kooperativer Session beitreten
-                    </button>
+                    <DashboardButton class="flex-even">
+                        Session beitreten
+                    </DashboardButton>
                 </div>
             </div>
             <!-- RECHTE SPALTE -->
-            <div class="col-12 col-lg-4">
-                <div class="card shadow-sm p-4 team-card">
-
-                    <h4 class="mb-3">Dein Lernteam</h4>
+            <AppCard class="col-12 col-lg-6">
+                <template #header>
+                    <div class="d-flex justify-content-center">
+                        <h4 class="m-2">Dein Lernteam</h4>
+                    </div>
+                </template>
+                <template #body>
                     <p class="text-muted">Schau dir den Fortschritt deiner Gruppe an:</p>
-
                     <div class="d-flex flex-column gap-3">
 
                         <div class="team-entry d-flex justify-content-between align-items-center p-3 shadow-sm rounded">
@@ -76,13 +66,19 @@
                             <span class="badge bg-light text-dark fs-6">130 Punkte</span>
                         </div>
                     </div>
-                </div>
-            </div>
+                </template>
+
+
+            </AppCard>
         </div>
     </div>
 </template>
 
 <script setup>
+import AppBoxWithShadow from '@/components/base/AppBoxWithShadow.vue';
+import AppCard from '@/components/base/AppCard.vue';
+import DashboardButton from '@/components/base/DashboardButton.vue';
+
 
 </script>
 
