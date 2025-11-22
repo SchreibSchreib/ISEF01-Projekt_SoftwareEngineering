@@ -43,7 +43,8 @@
                 <div class=" mb-4">
                     <p class="fw-bold mb-1">Begründung</p>
                     <AppInput class="form-control fs-5 border-3" placeholder="Hier eingeben" rows="4"
-                        v-model="explanation"></AppInput>
+                        v-model="explanation">
+                    </AppInput>
                 </div>
 
                 <!-- Speichern -->
@@ -69,12 +70,29 @@ const choices = ref({ A: "", B: "", C: "", D: "" });
 const correctAnswer = ref(null);
 const explanation = ref("");
 
-// später für API-Call
-function saveQuestion() {
-    console.log("Neue Frage:", newQuestion.value);
-    console.log("Antworten:", choices.value);
-    console.log("Korrekt:", correctAnswer.value);
-    console.log("Begründung:", explanation.value);
+async function saveQuestion() {
+    const payload = {
+        text: newQuestion.value,
+        choices: {
+            A: choices.value.A,
+            B: choices.value.B,
+            C: choices.value.C,
+            D: choices.value.D,
+        },
+        correct: correctAnswer.value,
+        explanation: explanation.value
+    };
+
+    const response = await fetch("/api/questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        credentials: "include"
+    });
+
+    if (!response.ok) {
+        console.error("Fehler beim Speichern", await response.text());
+    }
 }
 </script>
 

@@ -10,7 +10,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/teams")
-@CrossOrigin(origins = "*") // ggf. anpassen
 public class TeamController {
 
     private final TeamService teamService;
