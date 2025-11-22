@@ -28,7 +28,7 @@
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3">
 
                         <div class="flex-grow-1">
-                            <ExplainBox v-if="answered" :explanation="currentQuestion.explanation" />
+                            <ExplainBox v-if="answered" :explanation="currentQuestion.correctAnswerExplanation" />
                         </div>
 
                         <button class="btn border-3 rounded-3 px-4 py-2 fw-bold" style="height: 50px; width: 150px;"

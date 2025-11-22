@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*") // ggf. auf dein Frontend einschränken
 public class UserController {
 
     private final UserService userService;

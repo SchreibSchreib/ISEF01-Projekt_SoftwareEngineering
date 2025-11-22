@@ -33,13 +33,16 @@ const password = ref('')
 const errorMessage = ref('')
 
 onMounted(() => {
-  if (window.turnstile) {
-    turnstile.render('#turnstile-widget', {
-      sitekey: "0x4AAAAAACCGKnuiMiYVTDPG",
-      theme: "light"
-    });
-  }
-});
+  const interval = setInterval(() => {
+    if (window.turnstile) {
+      turnstile.render("#turnstile-widget", {
+        sitekey: "0x4AAAAAACCGKnuiMiYVTDPG",
+        theme: "light"
+      })
+      clearInterval(interval)
+    }
+  }, 200)
+})
 
 async function handleLogin() {
 
