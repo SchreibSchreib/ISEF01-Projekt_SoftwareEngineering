@@ -11,7 +11,6 @@
 </template>
 
 <script setup>
-import TheNewGameCard from '@/components/composed/TheNewGameCard.vue';
 import TheQuestionsCard from '@/components/composed/TheQuestionsCard.vue';
 </script>
 

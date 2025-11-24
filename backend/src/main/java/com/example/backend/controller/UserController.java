@@ -2,6 +2,9 @@ package com.example.backend.controller;
 
 import com.example.backend.models.User;
 import com.example.backend.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +32,22 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getLoggedInUser(HttpServletRequest request) {
+        Long userId = (Long) request.getSession().getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body("Keine gültige Session");
+        }
+
+        User user = userService.getUserById(userId);
+        return ResponseEntity.ok(user);
+    }
+
     // UserScore erhöhen
     @PostMapping("/{id}/addScore")
     public ResponseEntity<User> addScore(@PathVariable long id,
-                                         @RequestParam int points) {
+            @RequestParam int points) {
         User updated = userService.addScore(id, points);
         return ResponseEntity.ok(updated);
     }
@@ -40,7 +55,7 @@ public class UserController {
     // User einem Team zuordnen
     @PostMapping("/{userId}/team/{teamId}")
     public ResponseEntity<User> setUserTeam(@PathVariable long userId,
-                                            @PathVariable long teamId) {
+            @PathVariable long teamId) {
         User updated = userService.setUserTeam(userId, teamId);
         return ResponseEntity.ok(updated);
     }
