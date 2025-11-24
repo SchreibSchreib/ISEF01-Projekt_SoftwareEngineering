@@ -31,8 +31,6 @@ public class TeamController {
     }
 
     // Team erstellen
-    // Beispiel-Request (JSON):
-    // { "name": "Team Rocket", "creatorUserId": 1 }
     @PostMapping
     public ResponseEntity<Team> createTeam(@RequestBody Map<String, Object> body) {
         String name = (String) body.get("name");

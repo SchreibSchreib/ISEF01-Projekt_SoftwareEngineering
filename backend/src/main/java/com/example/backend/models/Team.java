@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "team")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Team {
 
     @Id
@@ -20,6 +22,7 @@ public class Team {
     // User, der das Team erstellt hat (FK created_by)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
+    @JsonIgnore
     private User createdBy;
 
     @Column(name = "teamscore", nullable = false)
@@ -27,10 +30,11 @@ public class Team {
 
     // Liste aller Benutzer, die diesem Team angehören
     @OneToMany(mappedBy = "team")
-    @JsonIgnore
+    @JsonIgnoreProperties({ "team" })
     private List<User> users;
 
-    public Team() {}
+    public Team() {
+    }
 
     public Team(String name, User createdBy, Integer teamscore) {
         this.name = name;
@@ -38,18 +42,43 @@ public class Team {
         this.teamscore = teamscore;
     }
 
-    public Long getTeamId() { return teamId; }
-    public void setTeamId(Long teamId) { this.teamId = teamId; }
+    public Long getTeamId() {
+        return teamId;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
 
-    public User getCreatedBy() { return createdBy; }
-    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
+    public String getName() {
+        return name;
+    }
 
-    public Integer getTeamscore() { return teamscore; }
-    public void setTeamscore(Integer teamscore) { this.teamscore = teamscore; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public List<User> getUsers() { return users; }
-    public void setUsers(List<User> users) { this.users = users; }
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Integer getTeamscore() {
+        return teamscore;
+    }
+
+    public void setTeamscore(Integer teamscore) {
+        this.teamscore = teamscore;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

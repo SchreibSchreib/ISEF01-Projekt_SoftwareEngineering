@@ -1,9 +1,13 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -15,18 +19,19 @@ public class User {
     private String name;
 
     @Column(name = "passwort", nullable = false)
+    @JsonIgnore
     private String passwort;
 
-    // ⚠ NEU: statt Long teamId -> Beziehung zu Team
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")   // benutzt die Spalte team_id in der Tabelle
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @Column(name = "userscore", nullable = false)
-    private Integer userscore = 0;  // Standardwert
+    private Integer userscore = 0; // Standardwert
 
     // Konstruktoren
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String passwort, Team team, Integer userscore) {
         this.name = name;
@@ -36,18 +41,43 @@ public class User {
     }
 
     // Getter & Setter
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public Long getUserId() {
+        return userId;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    public String getPasswort() { return passwort; }
-    public void setPasswort(String passwort) { this.passwort = passwort; }
+    public String getName() {
+        return name;
+    }
 
-    public Team getTeam() { return team; }
-    public void setTeam(Team team) { this.team = team; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Integer getUserscore() { return userscore; }
-    public void setUserscore(Integer userscore) { this.userscore = userscore; }
+    public String getPasswort() {
+        return passwort;
+    }
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Integer getUserscore() {
+        return userscore;
+    }
+
+    public void setUserscore(Integer userscore) {
+        this.userscore = userscore;
+    }
 }

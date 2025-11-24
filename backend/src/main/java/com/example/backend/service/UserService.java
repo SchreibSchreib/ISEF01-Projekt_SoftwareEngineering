@@ -38,9 +38,9 @@ public class UserService {
     /**
      * User per ID holen
      */
-    public User getUserById(long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found: " + userId));
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User nicht gefunden: " + id));
     }
 
     /**
