@@ -81,4 +81,17 @@ public class Team {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    // z.B. bei den anderen Feldern
+    @Column(name = "join_code", unique = true)
+    private String joinCode;
+
+    public String getJoinCode() {
+        return joinCode;
+}
+
+    public void setJoinCode(String joinCode) {
+        this.joinCode = joinCode;
+    }
+
 }

@@ -44,10 +44,13 @@ public class LoginController {
                     .body(Map.of("message", "Zu viele Fehlversuche. Bitte versuchen Sie es später erneut."));
         }
 
-        // Captcha prüfen
-        if (!verifyCaptcha(request.getCaptchaToken())) {
-            return ResponseEntity.status(401)
-                    .body(Map.of("message", "Ungültiges Captcha."));
+        // ⭐ NEU → Captcha nur prüfen, wenn NICHT localhost
+        if (!isLocalRequest(http)) {
+            // Captcha prüfen
+            if (!verifyCaptcha(request.getCaptchaToken())) {
+                return ResponseEntity.status(401)
+                        .body(Map.of("message", "Ungültiges Captcha."));
+            }
         }
 
         // Benutzer prüfen
@@ -59,7 +62,6 @@ public class LoginController {
                     .body(Map.of("message", "Ungültige Anmeldedaten"));
         }
 
-        // loginLimiter zurücksetzen
         loginLimiter.resetAttempts(ip);
 
         // Session setzen
@@ -83,5 +85,11 @@ public class LoginController {
         TurnstileResponse result = restTemplate.postForObject(url, data, TurnstileResponse.class);
 
         return result != null && result.isSuccess();
+    }
+
+    // ⭐ NEU: Methode bestimmt, ob Request lokal ist
+    private boolean isLocalRequest(HttpServletRequest request) {
+        String host = request.getServerName();
+        return "localhost".equals(host) || "127.0.0.1".equals(host);
     }
 }

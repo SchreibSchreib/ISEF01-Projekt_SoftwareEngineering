@@ -20,6 +20,27 @@ public class UserController {
         this.userService = userService;
     }
 
+    public static class AnswerRequest {
+        public long questionId;
+        public long choiceId;
+        public boolean correct;
+
+        public AnswerRequest() {
+        }
+    }
+
+    public static class AnswerResponse {
+        public boolean correct;
+        public int gainedPoints;
+        public int totalScore;
+
+        public AnswerResponse(boolean correct, int gainedPoints, int totalScore) {
+            this.correct = correct;
+            this.gainedPoints = gainedPoints;
+            this.totalScore = totalScore;
+        }
+    }
+
     // Alle User holen
     @GetMapping
     public List<User> getAllUsers() {
@@ -44,10 +65,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    // UserScore erhöhen
+    // UserScore erhöhen 
     @PostMapping("/{id}/addScore")
     public ResponseEntity<User> addScore(@PathVariable long id,
-            @RequestParam int points) {
+                                         @RequestParam int points) {
         User updated = userService.addScore(id, points);
         return ResponseEntity.ok(updated);
     }
@@ -55,8 +76,32 @@ public class UserController {
     // User einem Team zuordnen
     @PostMapping("/{userId}/team/{teamId}")
     public ResponseEntity<User> setUserTeam(@PathVariable long userId,
-            @PathVariable long teamId) {
+                                            @PathVariable long teamId) {
         User updated = userService.setUserTeam(userId, teamId);
         return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/{userId}/answer")
+    public ResponseEntity<AnswerResponse> answerQuestion(
+            @PathVariable long userId,
+            @RequestBody AnswerRequest request
+    ) {
+        // ruft deine neue Logik im UserService auf
+        int gained = userService.answerQuestion(
+                userId,
+                request.questionId,
+                request.choiceId,
+                request.correct
+        );
+
+        User user = userService.getUserById(userId);
+
+        AnswerResponse resp = new AnswerResponse(
+                request.correct,
+                gained,
+                user.getUserscore()
+        );
+
+        return ResponseEntity.ok(resp);
     }
 }

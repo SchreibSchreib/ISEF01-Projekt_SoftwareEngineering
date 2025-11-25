@@ -3,7 +3,10 @@ package com.example.backend.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "userantwort")  // DB-Tabellenname bleibt deutsch!
+@Table(
+    name = "userantwort",
+    uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "question_id" })
+)
 public class UserAnswer {
 
     @Id
@@ -16,11 +19,11 @@ public class UserAnswer {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "frage_id", nullable = false)
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auswahl_id", nullable = false)
+    @JoinColumn(name = "choice_id", nullable = false)
     private Choice choice;
 
     public UserAnswer() {}

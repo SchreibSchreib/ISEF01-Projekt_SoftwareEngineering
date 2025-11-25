@@ -43,12 +43,33 @@ public class TeamService {
 
         Team saved = teamRepository.save(team);
 
-        // Optional: Creator direkt in dieses Team stecken
+        // Creator direkt in dieses Team stecken
         creator.setTeam(saved);
         userRepository.save(creator);
 
-        return saved;
+        team.setJoinCode(generateJoinCode());
+
+        return teamRepository.save(team);
     }
+
+    private String generateJoinCode() {
+    String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < 6; i++) {
+        int idx = (int) (Math.random() * chars.length());
+        sb.append(chars.charAt(idx));
+    }
+    return sb.toString();
+}
+
+    public Team joinTeamByCode(String code, long userId) {
+        Team team = teamRepository.findByJoinCode(code);
+        if (team == null) {
+          throw new RuntimeException("Kein Team mit diesem Code gefunden: " + code);
+        }
+        return addUserToTeam(team.getTeamId(), userId);
+    }
+
 
     // User tritt einem Team bei
     public Team addUserToTeam(long teamId, long userId) { 
