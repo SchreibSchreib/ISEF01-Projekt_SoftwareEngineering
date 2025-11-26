@@ -8,12 +8,25 @@
       <!-- LINKE SPALTE -->
       <div class="col-12 col-lg-6 d-flex px-4 flex-column gap-3">
 
-        <AppBoxWithShadow class="shadow-sm text-center mt-4 mb-3">
+        <AppBoxWithShadow class="text-center mt-4 mb-3 p-3">
+          <p class="fs-4 m-0 fw-bold">Lernfortschritt</p>
+          <p class="fs-2 fw-bold my-2">
+            {{ progressPercent }}%
+          </p>
+          <p v-if="progressPercent === 100" class="text-success fw-bold m-0">
+            Herzlichen Glückwunsch!
+          </p>
+          <p class="text-muted m-0">
+            Du hast {{ progressPercent }}% erfolgreich beantwortet.
+          </p>
+        </AppBoxWithShadow>
+
+        <AppBoxWithShadow class="text-center mb-3">
           <p class="fs-4 m-0">Der Fragenkatalog beinhaltet momentan:</p>
           <p class="fs-5 fw-bold my-1">{{ questionCount }} Fragen</p>
         </AppBoxWithShadow>
 
-        <AppBoxWithShadow class="shadow-sm text-center">
+        <AppBoxWithShadow class="text-center">
           <p class="fs-4 m-0">Dein Score:</p>
           <p class="fs-5 fw-bold my-1">
             {{ currentUser?.userscore ?? 0 }} Punkte
@@ -63,8 +76,26 @@
               class="rounded-4 ps-4 d-flex justify-content-between align-items-center shadow-sm p-2 bg-light text-muted">
               <strong>Freier Platz</strong>
               <span class="pe-2">
-                <AppButton class="p-3 rounded-4">Hinzufügen</AppButton>
+                <AppButton v-if="!showTeamCodeBox" class="p-3 rounded-4" @click="openTeamCodeBox">Teamcode anzeigen</AppButton>
+                <AppButton v-if="showTeamCodeBox" class="p-3 rounded-4" @click="openTeamCodeBox">Teamcode verbergen</AppButton>
               </span>
+            </AppBox>
+
+            <AppBox v-if="showTeamCodeBox" class="pb-2">
+              <div class="d-flex justify-content-center align-items-center gap-5">
+                <h4 class="text-center m-0">Teamcode:</h4>
+                <p class="fs-3 fw-bold text-center m-0">
+                  {{ currentUser?.team?.joinCode }}
+                </p>
+              </div>
+
+
+              <div class="pb-2">
+                <p v-if="showCopyMessage" class="p-0">
+                  Teamcode wurde kopiert!
+                </p>
+              </div>
+
             </AppBox>
 
             <!-- Zusammenfassung -->
@@ -104,6 +135,17 @@ const questionCount = ref(0);
 // Teamdaten
 const teamUsers = computed(() => currentUser.value?.team?.users ?? []);
 const MAX_TEAM_SIZE = 4;
+const showTeamCodeBox = ref(false);
+const showCopyMessage = ref(false);
+
+const progressPercent = computed(() => {
+  if (!currentUser.value || !questionCount.value) return 0;
+  const POINTS_PER_QUESTION = 10;
+  const answered = (currentUser.value.userscore ?? 0) / POINTS_PER_QUESTION;
+  const percent = (answered / questionCount.value) * 100;
+
+  return Math.min(100, Math.max(0, Math.round(percent)));
+});
 
 const freeSlots = computed(() => {
   return Math.max(0, MAX_TEAM_SIZE - teamUsers.value.length);
@@ -150,6 +192,9 @@ const answeredQuestionsPercent = computed(() => {
   return percent.toFixed(1).replace(".", ",");
 });
 
+function openTeamCodeBox() {
+  showTeamCodeBox.value = !showTeamCodeBox.value;
+}
 
 onMounted(async () => {
   try {
