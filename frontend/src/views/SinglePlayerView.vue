@@ -18,24 +18,35 @@
 
             <template #body>
                 <div class="d-flex flex-column gap-3">
-                    <QuizCardButton v-for="(choice, index) in currentQuestion.choices"
-                        :key="`${currentIndex}-${choice.id}-${index}`" :state="answerClass(choice)" :disabled="answered"
-                        @click="selectAnswer(choice)">
+                    <QuizCardButton
+                        v-for="(choice, index) in currentQuestion.choices"
+                        :key="`${currentIndex}-${choice.id}-${index}`"
+                        :state="answerClass(choice)"
+                        :disabled="answered"
+                        @click="selectAnswer(choice)"
+                    >
                         <template #letter>{{ indexToLetter(index) }}</template>
                         <template #answer>{{ choice.text }}</template>
                     </QuizCardButton>
 
-                    <div class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3">
-
+                    <div
+                        class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3"
+                    >
                         <div class="flex-grow-1">
-                            <ExplainBox v-if="answered" :explanation="currentQuestion.correctAnswerExplanation" />
+                            <ExplainBox
+                                v-if="answered"
+                                :explanation="currentQuestion.correctAnswerExplanation"
+                            />
                         </div>
 
-                        <button class="btn border-3 rounded-3 px-4 py-2 fw-bold" style="height: 50px; width: 150px;"
-                            :disabled="!answered" @click="nextQuestion">
+                        <button
+                            class="btn border-3 rounded-3 px-4 py-2 fw-bold"
+                            style="height: 50px; width: 150px;"
+                            :disabled="!answered"
+                            @click="nextQuestion"
+                        >
                             {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
                         </button>
-
                     </div>
                 </div>
             </template>
@@ -57,7 +68,10 @@
                     <button class="btn btn-primary px-4 py-2 fw-bold me-3" @click="restart">
                         Nochmal spielen
                     </button>
-                    <button class="btn btn-secondary px-4 py-2 fw-bold" @click="$router.push('/dashboard')">
+                    <button
+                        class="btn btn-secondary px-4 py-2 fw-bold"
+                        @click="$router.push('/dashboard')"
+                    >
                         Zurück zum Dashboard
                     </button>
                 </div>
@@ -78,7 +92,7 @@ const finished = ref(false);
 
 /* Backend laden */
 onMounted(async () => {
-    const response = await fetch("/api/questions/random/4");
+    const response = await fetch("/api/questions/random/10");
     questions.value = await response.json();
     console.log("RAW QUESTIONS:", JSON.stringify(questions.value, null, 2));
     loading.value = false;
@@ -91,16 +105,56 @@ const answered = ref(false);
 const score = ref(0);
 
 const currentQuestion = computed(() => questions.value[currentIndex.value]);
-const isLastQuestion = computed(() => currentIndex.value === questions.value.length - 1);
+const isLastQuestion = computed(
+    () => currentIndex.value === questions.value.length - 1
+);
 
-/* Antwort wählen */
-function selectAnswer(choice) {
+/* Antwort wählen + Backend-Call */
+async function selectAnswer(choice) {
+    if (answered.value) return; 
+
     selectedChoice.value = choice;
     answered.value = true;
-    console.log("selectAnswer fired for", choice.text)
+    console.log("selectAnswer fired for", choice.text);
 
-    if (choice.id === currentQuestion.value.correctChoice.id) {
+    const isCorrect =
+        choice.id === currentQuestion.value.correctChoice.id;
+
+    // Für die Anzeige im aktuellen Quizlauf lokal mitzählen
+    if (isCorrect) {
         score.value++;
+    }
+
+    // Punkte & Tracking im Backend speichern
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+        console.warn("Kein userId in localStorage gefunden – Antwort wird nicht getrackt.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/users/${userId}/answer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+                questionId: currentQuestion.value.id, // ggf. an dein Feld anpassen
+                choiceId: choice.id,
+                correct: isCorrect
+            })
+        });
+
+        if (!response.ok) {
+            console.error("Fehler beim Antworten:", response.status, response.statusText);
+            return;
+        }
+
+        const data = await response.json();
+        console.log("AnswerResponse:", data);
+
+    } catch (err) {
+        console.error("Fehler beim Senden der Antwort:", err);
     }
 }
 
@@ -108,8 +162,7 @@ function selectAnswer(choice) {
 function answerClass(choice) {
     if (!answered.value) return "neutral";
 
-    if (choice.id === currentQuestion.value.correctChoice.id)
-        return "correct";
+    if (choice.id === currentQuestion.value.correctChoice.id) return "correct";
 
     // *** ALLE falschen Antworten rot ***
     return "wrong";
@@ -124,32 +177,12 @@ function indexToLetter(index) {
 function nextQuestion() {
     if (isLastQuestion.value) {
         finished.value = true;
-
-        updateScore();
         return;
-
     }
 
     currentIndex.value++;
     selectedChoice.value = null;
     answered.value = false;
-}
-
-async function updateScore() {
-    const userId = localStorage.getItem("userId");
-    const points = score.value * 10;
-
-    try {
-        await fetch(`/api/users/${userId}/addScore?points=${points}`, {
-            method: "POST",
-            credentials: "include"
-        });
-
-        console.log("Score erfolgreich aktualisiert:", points);
-
-    } catch (err) {
-        console.error("Score konnte nicht aktualisiert werden:", err);
-    }
 }
 
 /* Restart */

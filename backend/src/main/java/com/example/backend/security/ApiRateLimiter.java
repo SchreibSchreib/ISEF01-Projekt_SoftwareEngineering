@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 @Component
 public class ApiRateLimiter {
 
-    private static final int MAX_REQUESTS = 30; // Schwellenwert
+    private static final int MAX_REQUESTS = 100; // Schwellenwert
     private static final long TIME_WINDOW = 10 * 60 * 1000;
 
     private final Map<String, ConcurrentLinkedDeque<Long>> requestTimes = new ConcurrentHashMap<>();
