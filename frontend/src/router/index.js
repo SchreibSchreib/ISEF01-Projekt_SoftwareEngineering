@@ -24,12 +24,6 @@ const router = createRouter({
       meta: { hideNavbar: false, requiresAuth: true },
     },
     {
-      path: "/startquiz",
-      name: "startquiz",
-      component: QuizStartView,
-      meta: { hideNavbar: false, requiresAuth: true },
-    },
-    {
       path: "/singleplayer",
       name: "singleplayer",
       component: SinglePlayerView,

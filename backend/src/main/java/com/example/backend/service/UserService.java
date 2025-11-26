@@ -25,10 +25,10 @@ public class UserService {
     private final UserAnswerRepository userAnswerRepository;
 
     public UserService(UserRepository userRepository,
-                       TeamRepository teamRepository,
-                       QuestionRepository questionRepository,
-                       ChoiceRepository choiceRepository,
-                       UserAnswerRepository userAnswerRepository) {
+            TeamRepository teamRepository,
+            QuestionRepository questionRepository,
+            ChoiceRepository choiceRepository,
+            UserAnswerRepository userAnswerRepository) {
         this.userRepository = userRepository;
         this.teamRepository = teamRepository;
         this.questionRepository = questionRepository;
@@ -91,92 +91,94 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User saveUser(User user) {
+    return userRepository.save(user);
+}
+
     /**
- * Speichert eine Antwort eines Users und vergibt ggf. Punkte.
- *
- * Regel:
- * - Pro Frage gibt es max. 10 Punkte, und zwar beim ersten Mal,
- *   wenn der User diese Frage KORREKT beantwortet.
- * - Vorherige falsche Antworten blockieren die Punkte NICHT.
- */
-public int answerQuestion(long userId,
-                          long questionId,
-                          long choiceId,
-                          boolean correctFromFrontend) {
+     * Speichert eine Antwort eines Users und vergibt ggf. Punkte.
+     *
+     * Regel:
+     * - Pro Frage gibt es max. 10 Punkte, und zwar beim ersten Mal,
+     * wenn der User diese Frage KORREKT beantwortet.
+     * - Vorherige falsche Antworten blockieren die Punkte NICHT.
+     */
+    public int answerQuestion(long userId,
+            long questionId,
+            long choiceId,
+            boolean correctFromFrontend) {
 
-    // 1) Entities laden
-    User user = getUserById(userId);
+        // 1) Entities laden
+        User user = getUserById(userId);
 
-    Question question = questionRepository.findById(questionId)
-            .orElseThrow(() -> new RuntimeException("Frage nicht gefunden: " + questionId));
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Frage nicht gefunden: " + questionId));
 
-    Choice choice = choiceRepository.findById(choiceId)
-            .orElseThrow(() -> new RuntimeException("Auswahl nicht gefunden: " + choiceId));
+        Choice choice = choiceRepository.findById(choiceId)
+                .orElseThrow(() -> new RuntimeException("Auswahl nicht gefunden: " + choiceId));
 
-    // Korrektheit zur Sicherheit auch im Backend bestimmen
-    Long correctChoiceId = question.getCorrectChoice().getId(); // ggf. Feldnamen anpassen
-    boolean isCorrect = choice.getId().equals(correctChoiceId);
+        // Korrektheit zur Sicherheit auch im Backend bestimmen
+        Long correctChoiceId = question.getCorrectChoice().getId(); // ggf. Feldnamen anpassen
+        boolean isCorrect = choice.getId().equals(correctChoiceId);
 
-    // 2) Prüfen, ob dieser User die Frage schon einmal beantwortet hat
-    Optional<UserAnswer> existingOpt =
-            userAnswerRepository.findByUserAndQuestion(user, question);
+        // 2) Prüfen, ob dieser User die Frage schon einmal beantwortet hat
+        Optional<UserAnswer> existingOpt = userAnswerRepository.findByUserAndQuestion(user, question);
 
-    if (existingOpt.isPresent()) {
-        UserAnswer existing = existingOpt.get();
-        boolean existingIsCorrect =
-                existing.getChoice().getId().equals(correctChoiceId);
+        if (existingOpt.isPresent()) {
+            UserAnswer existing = existingOpt.get();
+            boolean existingIsCorrect = existing.getChoice().getId().equals(correctChoiceId);
 
-        // Fall A: Es gibt schon eine KORREKTE Antwort -> nie wieder Punkte
-        if (existingIsCorrect) {
-            // Antwort ggf. aktualisieren, aber keine Punkte mehr
+            // Fall A: Es gibt schon eine KORREKTE Antwort -> nie wieder Punkte
+            if (existingIsCorrect) {
+                // Antwort ggf. aktualisieren, aber keine Punkte mehr
+                existing.setChoice(choice);
+                userAnswerRepository.save(existing);
+                return 0;
+            }
+
+            // Fall B: Es gibt eine falsche Antwort, neue ist ebenfalls falsch -> nix
+            if (!isCorrect) {
+                existing.setChoice(choice); // optional: letzte Antwort speichern
+                userAnswerRepository.save(existing);
+                return 0;
+            }
+
+            // Fall C: Es gibt eine falsche Antwort, neue ist JETZT korrekt
             existing.setChoice(choice);
             userAnswerRepository.save(existing);
-            return 0;
+
+            addPointsToUserAndTeam(user, 10);
+            return 10;
         }
 
-        // Fall B: Es gibt eine falsche Antwort, neue ist ebenfalls falsch -> nix
-        if (!isCorrect) {
-            existing.setChoice(choice); // optional: letzte Antwort speichern
-            userAnswerRepository.save(existing);
-            return 0;
+        // 3) Es gibt noch keinen Eintrag für (User, Frage)
+        UserAnswer answer = new UserAnswer();
+        answer.setUser(user);
+        answer.setQuestion(question);
+        answer.setChoice(choice);
+        userAnswerRepository.save(answer);
+
+        if (isCorrect) {
+            addPointsToUserAndTeam(user, 10);
+            return 10;
         }
 
-        // Fall C: Es gibt eine falsche Antwort, neue ist JETZT korrekt
-        existing.setChoice(choice);
-        userAnswerRepository.save(existing);
-
-        addPointsToUserAndTeam(user, 10);
-        return 10;
+        return 0;
     }
 
-    // 3) Es gibt noch keinen Eintrag für (User, Frage)
-    UserAnswer answer = new UserAnswer();
-    answer.setUser(user);
-    answer.setQuestion(question);
-    answer.setChoice(choice);
-    userAnswerRepository.save(answer);
+    /**
+     * Hilfsmethode: Punkte vergeben an User (+ Team, falls vorhanden)
+     */
+    private void addPointsToUserAndTeam(User user, int points) {
+        int currentUserScore = user.getUserscore() == null ? 0 : user.getUserscore();
+        user.setUserscore(currentUserScore + points);
+        userRepository.save(user);
 
-    if (isCorrect) {
-        addPointsToUserAndTeam(user, 10);
-        return 10;
+        if (user.getTeam() != null) {
+            Team team = user.getTeam();
+            int currentTeamScore = team.getTeamscore() == null ? 0 : team.getTeamscore();
+            team.setTeamscore(currentTeamScore + points);
+            teamRepository.save(team);
+        }
     }
-
-    return 0;
-}
-
-/**
- * Hilfsmethode: Punkte vergeben an User (+ Team, falls vorhanden)
- */
-private void addPointsToUserAndTeam(User user, int points) {
-    int currentUserScore = user.getUserscore() == null ? 0 : user.getUserscore();
-    user.setUserscore(currentUserScore + points);
-    userRepository.save(user);
-
-    if (user.getTeam() != null) {
-        Team team = user.getTeam();
-        int currentTeamScore = team.getTeamscore() == null ? 0 : team.getTeamscore();
-        team.setTeamscore(currentTeamScore + points);
-        teamRepository.save(team);
-    }
-}
 }

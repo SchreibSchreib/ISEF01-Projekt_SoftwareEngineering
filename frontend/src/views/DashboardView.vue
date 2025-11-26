@@ -29,7 +29,7 @@
             Neues Quiz starten
           </DashboardButton>
 
-          <DashboardButton to="/multiplayer" class="flex-even py-5">
+          <DashboardButton to="/join-team" class="flex-even py-5">
             Session beitreten
           </DashboardButton>
         </div>
@@ -48,11 +48,8 @@
 
           <div class="d-flex flex-column gap-3">
             <!-- Teammitglieder -->
-            <AppBox
-              v-for="member in teamUsers"
-              :key="member.userId"
-              class="rounded-4 ps-4 d-flex justify-content-between align-items-center shadow-sm p-1"
-            >
+            <AppBox v-for="member in teamUsers" :key="member.userId"
+              class="rounded-4 ps-4 d-flex justify-content-between align-items-center shadow-sm p-1">
               <strong>{{ member.name }}</strong>
               <span class="badge text-dark fs-6">
                 <AppBox class="border-black">
@@ -62,11 +59,8 @@
             </AppBox>
 
             <!-- Freie Slots -->
-            <AppBox
-              v-for="i in freeSlots"
-              :key="'slot-' + i"
-              class="rounded-4 ps-4 d-flex justify-content-between align-items-center shadow-sm p-2 bg-light text-muted"
-            >
+            <AppBox v-for="i in freeSlots" :key="'slot-' + i"
+              class="rounded-4 ps-4 d-flex justify-content-between align-items-center shadow-sm p-2 bg-light text-muted">
               <strong>Freier Platz</strong>
               <span class="pe-2">
                 <AppButton class="p-3 rounded-4">Hinzufügen</AppButton>
@@ -74,9 +68,7 @@
             </AppBox>
 
             <!-- Zusammenfassung -->
-            <AppBox
-              class="fs-4 rounded-4 ps-4 d-flex flex-column align-items-start shadow-sm pe-1"
-            >
+            <AppBox class="fs-4 rounded-4 ps-4 d-flex flex-column align-items-start shadow-sm pe-1">
               <div class="d-flex w-100 justify-content-between">
                 <strong>Durchschnittliche Punkte</strong>
                 <span class="badge text-dark">
@@ -161,6 +153,7 @@ const answeredQuestionsPercent = computed(() => {
 
 onMounted(async () => {
   try {
+    // 1. User laden
     const userData = await fetch("/api/users/me", {
       credentials: "include",
     });
@@ -173,15 +166,39 @@ onMounted(async () => {
     const user = await userData.json();
     currentUser.value = user;
 
+    const userId = user.userId;
+
+    // 2. Teamcode prüfen
+    const hasValidTeam =
+      user.team &&
+      user.team.joinCode &&
+      user.team.joinCode.length === 6;
+
+    // 3. Wenn kein gültiges Team → Backend auto-fix (Team erstellen)
+    if (!hasValidTeam) {
+      console.warn("User hat kein gültiges Team → wird erzeugt...");
+
+      const teamRes = await fetch(`/api/teams/checkOrCreate?userId=${userId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const newTeam = await teamRes.json();
+      currentUser.value.team = newTeam;
+    }
+
+    // 4. Fragen laden
     const questionData = await fetch("/api/questions", {
       credentials: "include",
     });
     const questions = await questionData.json();
     questionCount.value = questions.length;
+
   } catch (e) {
-    console.error("Fehler beim Laden des Users:", e);
+    console.error("Fehler beim Laden des Dashboards:", e);
   }
 });
+
 </script>
 
 <style scoped></style>

@@ -14,10 +14,7 @@
               <NavbarButton icon="gauge" to="dashboard">Dashboard</NavbarButton>
             </li>
             <li class="nav-item">
-              <NavbarButton icon="graduation-cap" to="startquiz">Quiz starten</NavbarButton>
-            </li>
-            <li class="nav-item">
-              <NavbarButton icon="heart-handshake" to="cooperate">Kooperation</NavbarButton>
+              <NavbarButton icon="graduation-cap" to="singleplayer">Quiz starten</NavbarButton>
             </li>
             <li class="nav-item">
               <NavbarButton icon="book-copy" to="questions">Fragenkatalog</NavbarButton>
@@ -42,10 +39,7 @@
           <NavbarButton icon="gauge" to="dashboard">Dashboard</NavbarButton>
         </li>
         <li class="nav-item">
-          <NavbarButton icon="graduation-cap" to="startquiz">Quiz starten</NavbarButton>
-        </li>
-        <li class="nav-item">
-          <NavbarButton icon="heart-handshake" to="cooperate">Kooperation</NavbarButton>
+          <NavbarButton icon="graduation-cap" to="singleplayer">Quiz starten</NavbarButton>
         </li>
         <li class="nav-item">
           <NavbarButton icon="book-copy" to="questions">Fragenkatalog</NavbarButton>
