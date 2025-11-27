@@ -23,6 +23,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { userStore } from "@/stores/userStore";
 import router from '@/router'
 import AppButton from '../base/AppButton.vue';
 import AppInput from '../base/AppInput.vue';
@@ -46,48 +47,52 @@ onMounted(() => {
 
 async function handleLogin() {
 
-  const token = document.querySelector('[name="cf-turnstile-response"]')?.value
+  const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
   if (!token) {
-    errorMessage.value = "Bitte bestätige das Captcha."
-    return
+    errorMessage.value = "Bitte bestätige das Captcha.";
+    return;
   }
 
   try {
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({
         name: name.value,
         passwort: password.value,
         captchaToken: token
-      }),
+      })
+    });
 
-    })
-
-    if (response.ok) {
-      if (response.ok) {
-        await fetch("/api/session/check", { credentials: "include" })
-          .then(res => res.json())
-          .then(data => {
-            localStorage.setItem("userId", data.userId)
-            localStorage.setItem("username", data.username)
-          });
-
-        router.push({ name: "dashboard" })
-      }
-
-    } else {
-      const error = await response.json()
-      errorMessage.value = error.message || 'Anmeldung fehlgeschlagen.'
-      resetTurnstile()
+    if (!response.ok) {
+      const error = await response.json();
+      errorMessage.value = error.message || "Anmeldung fehlgeschlagen.";
+      resetTurnstile();
+      return;
     }
+
+    userStore.currentUser = null;
+    userStore.isLoaded = false;
+
+    const meRes = await fetch("/api/users/me", {
+      credentials: "include"
+    });
+
+    if (meRes.ok) {
+      userStore.currentUser = await meRes.json();
+      userStore.isLoaded = true;
+    }
+
+    router.push({ name: "dashboard" });
+
   } catch (err) {
-    console.error(err)
-    errorMessage.value = 'Server nicht erreichbar.'
-    resetTurnstile()
+    console.error(err);
+    errorMessage.value = "Server nicht erreichbar.";
+    resetTurnstile();
   }
 }
+
 function resetTurnstile() {
   if (window.turnstile) {
     turnstile.reset()

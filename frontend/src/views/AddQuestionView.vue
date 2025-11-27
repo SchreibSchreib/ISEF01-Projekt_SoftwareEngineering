@@ -1,8 +1,8 @@
 <template>
-    <div class="container py-4">
-        <h1 class="mb-4 pb-4">Hallo StudentXY!</h1>
+    <div class="container py-5">
+        <h1 class="fw-bold">Hallo {{ userStore.currentUser?.name }}</h1>
 
-        <div class="row g-4">
+        <div class="row g-3">
 
             <!--LINKER BEREICH: QUIZCARD-->
             <div class="col-12 col-lg-8">
@@ -59,6 +59,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { userStore } from "@/stores/userStore";
 import AppCard from "@/components/base/AppCard.vue";
 import AppInput from "@/components/base/AppInput.vue";
 import AppBox from "@/components/base/AppBox.vue";

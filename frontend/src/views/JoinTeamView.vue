@@ -1,6 +1,6 @@
 <template>
   <div class="container py-5">
-    <h1 class="fw-bold mb-4">Team beitreten</h1>
+    <h1 class="pb-5 fw-bold">Team beitreten</h1>
 
     <AppBoxWithShadow>
       <div class="p-4">
@@ -26,11 +26,7 @@
             <AppInput v-model="teamCode" placeholder="z. B. ABC123" />
           </div>
 
-          <button
-            class="btn btn-primary w-100 py-3 fw-semibold"
-            :disabled="loadingJoin || !teamCode"
-            @click="joinTeam"
-          >
+          <button class="btn btn-primary w-100 py-3 fw-semibold" :disabled="loadingJoin || !teamCode" @click="joinTeam">
             <span v-if="loadingJoin">Tritt bei…</span>
             <span v-else>Team beitreten</span>
           </button>
@@ -48,17 +44,11 @@
 
           <div class="mb-3">
             <label class="form-label fw-semibold">Teamname</label>
-            <AppInput
-              v-model="teamName"
-              placeholder="z. B. Team Alpha"
-            />
+            <AppInput v-model="teamName" placeholder="z. B. Team Alpha" />
           </div>
 
-          <button
-            class="btn btn-secondary w-100 py-3 fw-semibold mb-3"
-            :disabled="loadingCreate || !userId"
-            @click="createTeam"
-          >
+          <button class="btn btn-secondary w-100 py-3 fw-semibold mb-3" :disabled="loadingCreate || !userId"
+            @click="createTeam">
             <span v-if="loadingCreate">Team wird erstellt…</span>
             <span v-else>Neues Team & Teamcode erzeugen</span>
           </button>
@@ -113,7 +103,7 @@ onMounted(async () => {
     }
 
     const data = await res.json();
-    
+
     userId.value = data.id ?? data.userId ?? data.userID;
 
     if (!userId.value) {

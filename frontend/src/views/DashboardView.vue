@@ -1,10 +1,10 @@
 <template>
-  <div class="container py-4">
-    <div class="mb-5">
-      <h1>Hallo {{ currentUser?.name }}</h1>
+  <div class="container pt-5">
+    <div>
+      <h1 class="fw-bold">Hallo {{ userStore.currentUser?.name }}</h1>
     </div>
 
-    <div class="row g-4 mt-5 align-items-start">
+    <div class="row g-4 mt-2 align-items-start">
       <!-- LINKE SPALTE -->
       <div class="col-12 col-lg-6 d-flex px-4 flex-column gap-3">
 
@@ -76,8 +76,10 @@
               class="rounded-4 ps-4 d-flex justify-content-between align-items-center shadow-sm p-2 bg-light text-muted">
               <strong>Freier Platz</strong>
               <span class="pe-2">
-                <AppButton v-if="!showTeamCodeBox" class="p-3 rounded-4" @click="openTeamCodeBox">Teamcode anzeigen</AppButton>
-                <AppButton v-if="showTeamCodeBox" class="p-3 rounded-4" @click="openTeamCodeBox">Teamcode verbergen</AppButton>
+                <AppButton v-if="!showTeamCodeBox" class="p-3 rounded-4" @click="openTeamCodeBox">Teamcode anzeigen
+                </AppButton>
+                <AppButton v-if="showTeamCodeBox" class="p-3 rounded-4" @click="openTeamCodeBox">Teamcode verbergen
+                </AppButton>
               </span>
             </AppBox>
 
@@ -123,6 +125,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { userStore } from "@/stores/userStore";
 import AppBoxWithShadow from "@/components/base/AppBoxWithShadow.vue";
 import AppCard from "@/components/base/AppCard.vue";
 import DashboardButton from "@/components/base/DashboardButton.vue";

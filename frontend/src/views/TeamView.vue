@@ -1,7 +1,6 @@
 <template>
-  <div class="container py-4 team-page">
-    <h2 class="fw-bold mb-4">Hallo StudentXY!</h2>
-
+  <div class="container py-5">
+    <h1 class="fw-bold">Hallo {{ userStore.currentUser?.name }}</h1>
     <div v-if="loading" class="text-muted">Teamdaten werden geladen…</div>
 
     <!-- Kein Team -->
@@ -14,7 +13,7 @@
     </div>
 
     <!-- Team vorhanden -->
-    <div v-else class="row g-4">
+    <div v-else class="row g-4 pt-5">
       <!-- Team-Lobby -->
       <div class="col-lg-7">
         <AppBoxWithShadow>
@@ -23,10 +22,7 @@
 
             <p class="small text-muted mt-2">
               Du möchtest einem anderen Team beitreten?
-              <RouterLink
-                to="/join-team"
-                class="link-primary text-decoration-underline"
-              >
+              <RouterLink to="/join-team" class="link-primary text-decoration-underline">
                 Team mit Code beitreten
               </RouterLink>
             </p>
@@ -47,15 +43,10 @@
 
             <!-- Mitgliederliste -->
             <ul class="list-unstyled mt-4 mb-0">
-              <li
-                v-for="member in members"
-                :key="member.id ?? member.name"
-                class="member-row d-flex align-items-center justify-content-between py-2"
-              >
+              <li v-for="member in members" :key="member.id ?? member.name"
+                class="member-row d-flex align-items-center justify-content-between py-2">
                 <div class="d-flex align-items-center gap-3">
-                  <div
-                    class="member-avatar rounded-circle d-flex align-items-center justify-content-center"
-                  >
+                  <div class="member-avatar rounded-circle d-flex align-items-center justify-content-center">
                     <span>{{ initials(member.name) }}</span>
                   </div>
                   <span class="member-name">{{ member.name }}</span>
@@ -76,21 +67,11 @@
             <h3 class="section-title mb-4 px-3 py-2">Team-Chat</h3>
 
             <div class="chat-window mb-3">
-              <div
-                v-if="messages.length === 0"
-                class="text-muted fst-italic small"
-              >
+              <div v-if="messages.length === 0" class="text-muted fst-italic small">
                 Noch keine Nachrichten…
               </div>
-              <div
-                v-else
-                class="d-flex flex-column gap-2"
-              >
-                <div
-                  v-for="(msg, index) in messages"
-                  :key="msg.id ?? index"
-                  class="chat-message p-2 rounded-3"
-                >
+              <div v-else class="d-flex flex-column gap-2">
+                <div v-for="(msg, index) in messages" :key="msg.id ?? index" class="chat-message p-2 rounded-3">
                   <div class="small fw-semibold">{{ msg.author }}</div>
                   <div>{{ msg.text }}</div>
                 </div>
@@ -98,25 +79,14 @@
             </div>
 
             <div class="input-group mb-4">
-              <input
-                v-model="currentMessage"
-                type="text"
-                class="form-control border-2 rounded-start-4 py-3"
-                placeholder="Nachricht"
-                @keyup.enter="sendMessage"
-              />
-              <button
-                class="btn btn-primary px-4 rounded-end-4 send-btn"
-                type="button"
-                @click="sendMessage"
-              >
+              <input v-model="currentMessage" type="text" class="form-control border-2 rounded-start-4 py-3"
+                placeholder="Nachricht" @keyup.enter="sendMessage" />
+              <button class="btn btn-primary px-4 rounded-end-4 send-btn" type="button" @click="sendMessage">
                 ▶
               </button>
             </div>
 
-            <div
-              class="average-box d-flex align-items-center justify-content-between rounded-4 px-3 py-3"
-            >
+            <div class="average-box d-flex align-items-center justify-content-between rounded-4 px-3 py-3">
               <span class="fw-semibold">Durchschnittliche Punkte</span>
               <span class="fs-4 fw-bold">
                 {{ averagePoints }}
@@ -132,6 +102,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { RouterLink } from "vue-router";
+import { userStore } from "@/stores/userStore";
 import AppBoxWithShadow from "@/components/base/AppBoxWithShadow.vue";
 import AppInput from "@/components/base/AppInput.vue";
 
@@ -325,7 +296,7 @@ onMounted(initTeam);
 }
 
 /* Mitgliederliste */
-.member-row + .member-row {
+.member-row+.member-row {
   border-top: 1px solid #e2e6ea;
 }
 
