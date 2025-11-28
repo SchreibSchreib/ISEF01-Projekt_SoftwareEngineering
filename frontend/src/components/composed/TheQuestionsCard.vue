@@ -8,6 +8,8 @@
             </AppButton>
             <AppButton class="fs-3 fw-bold rounded-4 mt-3 mb-4" @click="navigateEvaluateQuestions">Neue Frage bewerten
             </AppButton>
+            <AppButton class="fs-3 fw-bold rounded-4 mt-3 mb-4" @click="navigateShowAllQuestions">Alle Fragen anzeigen
+            </AppButton>
         </template>
     </AppCard>
 </template>
@@ -23,6 +25,10 @@ function navigateAddQuestion() {
 
 function navigateEvaluateQuestions() {
     router.push({ name: 'evaluatequestions' });
+}
+
+function navigateShowAllQuestions() {
+    router.push({ name: 'showallquestions' });
 }
 
 </script>

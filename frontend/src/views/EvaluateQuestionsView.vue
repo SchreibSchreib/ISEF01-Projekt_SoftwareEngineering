@@ -2,10 +2,21 @@
     <div class="container py-5">
         <h1 class="fw-bold mb-4">Eingereichte Fragen bewerten</h1>
 
+        <!-- Loading -->
         <div v-if="loading" class="text-center py-5">
             <div class="spinner-border"></div>
         </div>
 
+        <!-- Keine Fragen -->
+        <div 
+    v-else-if="questions.length === 0"
+    class="d-flex flex-column justify-content-center align-items-center text-center mt-5" 
+    style="min-height: 50vh;"
+>
+    <TheNothingToEvaluateScreen />
+</div>
+
+        <!-- Fragen vorhanden -->
         <div v-else>
             <div v-for="question in questions" :key="question.id" class="moderation-wrapper mb-4">
                 <AppBoxWithShadow class="p-0 bg-light rounded-4">
@@ -19,10 +30,12 @@
 
                         <template #body>
                             <div class="d-flex flex-column gap-3">
-
-                                <QuizCardButton v-for="choice in mapChoices(question)" :key="choice.label"
+                                <QuizCardButton
+                                    v-for="choice in mapChoices(question)"
+                                    :key="choice.label"
                                     :state="choice.label === question.correctAnswer ? 'correct' : 'wrong'"
-                                    :disabled="true">
+                                    :disabled="true"
+                                >
                                     <template #letter>{{ choice.label }}</template>
                                     <template #answer>{{ choice.text }}</template>
                                 </QuizCardButton>
@@ -33,12 +46,10 @@
                                     <AppButtonGreen class="rounded-4" @click="vote(question.id, true)">
                                         Akzeptieren ({{ question.positiveVotes }})
                                     </AppButtonGreen>
-
                                     <AppButtonRed class="rounded-4" @click="vote(question.id, false)">
                                         Ablehnen ({{ question.negativeVotes }})
                                     </AppButtonRed>
                                 </div>
-
                             </div>
                         </template>
                     </AppCard>
@@ -56,6 +67,7 @@ import AppCard from "@/components/base/AppCard.vue";
 import QuizCardButton from "@/components/base/QuizCardButton.vue";
 import ExplainBox from "@/components/base/ExplainBox.vue";
 import AppBoxWithShadow from "@/components/base/AppBoxWithShadow.vue";
+import TheNothingToEvaluateScreen from "@/components//composed/TheNothingToEvaluateScreen.vue";
 
 const questions = ref([]);
 const loading = ref(true);
@@ -78,7 +90,7 @@ async function vote(id, positive) {
             return;
         }
 
-        await loadQuestions(); // Liste aktualisieren (approved != 0 kommt nicht mehr mit)
+        await loadQuestions();
     } catch (e) {
         console.error(e);
         alert("Netzwerkfehler beim Bewerten");
@@ -96,10 +108,3 @@ function mapChoices(q) {
 
 onMounted(loadQuestions);
 </script>
-
-<style scoped>
-.moderation-wrapper {
-    max-width: 900px;
-    margin: 0 auto; /* zentriert */
-}
-</style>
