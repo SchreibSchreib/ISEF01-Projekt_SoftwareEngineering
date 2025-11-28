@@ -64,7 +64,6 @@ import ChoiceButton from "@/components/base/AppChoiceButton.vue";
 import SuccessPanel from "@/components/base/SuccessPanel.vue";
 import AppButton from "@/components/base/AppButton.vue";
 
-// Formular-Daten
 const newQuestion = ref("");
 const choices = ref({ A: "", B: "", C: "", D: "" });
 const correctAnswer = ref(null);
@@ -72,6 +71,27 @@ const explanation = ref("");
 const success = ref(false);
 
 async function saveQuestion() {
+    if (!newQuestion.value.trim()) {
+        alert("Bitte eine Frage eingeben.");
+        return;
+    }
+
+    const allFilled = Object.values(choices.value).every(v => v.trim() !== "");
+    if (!allFilled) {
+        alert("Bitte alle vier Antwortmöglichkeiten ausfüllen.");
+        return;
+    }
+
+    if (!correctAnswer.value) {
+        alert("Bitte die richtige Antwort auswählen.");
+        return;
+    }
+
+    if (!explanation.value.trim()) {
+        alert("Bitte eine Begründung eingeben.");
+        return;
+    }
+
     const payload = {
         text: newQuestion.value,
         choiceA: choices.value.A,
