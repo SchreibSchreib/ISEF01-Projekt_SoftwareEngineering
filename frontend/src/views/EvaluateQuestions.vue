@@ -7,41 +7,42 @@
         </div>
 
         <div v-else>
-            <div 
-                v-for="q in questions" 
-                :key="q.id"
-                class="border rounded-4 p-4 mb-4 bg-white shadow-sm"
-            >
-                <h4 class="fw-bold">{{ q.text }}</h4>
+            <div v-for="question in questions" :key="question.id" class="moderation-wrapper mb-4">
+                <AppBoxWithShadow class="p-0 bg-light rounded-4">
+                    <AppCard class="p-2">
+                        <template #header>
+                            <h4 class="mt-2">{{ question.text }}</h4>
+                            <p class="mb-1">
+                                Eingereicht von: <strong>{{ question.submittedBy?.name || 'Unbekannt' }}</strong>
+                            </p>
+                        </template>
 
-                <p class="text-muted mb-2">
-                    Eingereicht von: <strong>{{ q.submittedBy?.name || 'Unbekannt' }}</strong>
-                </p>
+                        <template #body>
+                            <div class="d-flex flex-column gap-3">
 
-                <ul class="mt-3">
-                    <li>A: {{ q.choiceA }}</li>
-                    <li>B: {{ q.choiceB }}</li>
-                    <li>C: {{ q.choiceC }}</li>
-                    <li>D: {{ q.choiceD }}</li>
-                </ul>
+                                <QuizCardButton v-for="choice in mapChoices(question)" :key="choice.label"
+                                    :state="choice.label === question.correctAnswer ? 'correct' : 'wrong'"
+                                    :disabled="true">
+                                    <template #letter>{{ choice.label }}</template>
+                                    <template #answer>{{ choice.text }}</template>
+                                </QuizCardButton>
 
-                <p><strong>Erklärung:</strong> {{ q.explanation }}</p>
+                                <ExplainBox :explanation="question.explanation" />
 
-                <div class="d-flex gap-3 mt-3">
-                    <button 
-                        class="btn btn-success flex-fill" 
-                        @click="vote(q.id, true)"
-                    >
-                        👍 Akzeptieren ({{ q.positiveVotes }})
-                    </button>
+                                <div class="d-flex gap-3 mt-3 flex-column flex-lg-row">
+                                    <AppButtonGreen class="rounded-4" @click="vote(question.id, true)">
+                                        Akzeptieren ({{ question.positiveVotes }})
+                                    </AppButtonGreen>
 
-                    <button 
-                        class="btn btn-danger flex-fill" 
-                        @click="vote(q.id, false)"
-                    >
-                        👎 Ablehnen ({{ q.negativeVotes }})
-                    </button>
-                </div>
+                                    <AppButtonRed class="rounded-4" @click="vote(question.id, false)">
+                                        Ablehnen ({{ question.negativeVotes }})
+                                    </AppButtonRed>
+                                </div>
+
+                            </div>
+                        </template>
+                    </AppCard>
+                </AppBoxWithShadow>
             </div>
         </div>
     </div>
@@ -49,6 +50,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import AppButtonGreen from "@/components/base/AppButtonGreen.vue";
+import AppButtonRed from "@/components/base/AppButtonRed.vue";
+import AppCard from "@/components/base/AppCard.vue";
+import QuizCardButton from "@/components/base/QuizCardButton.vue";
+import ExplainBox from "@/components/base/ExplainBox.vue";
+import AppBoxWithShadow from "@/components/base/AppBoxWithShadow.vue";
 
 const questions = ref([]);
 const loading = ref(true);
@@ -78,5 +85,21 @@ async function vote(id, positive) {
     }
 }
 
+function mapChoices(q) {
+    return [
+        { label: "A", text: q.choiceA },
+        { label: "B", text: q.choiceB },
+        { label: "C", text: q.choiceC },
+        { label: "D", text: q.choiceD }
+    ];
+}
+
 onMounted(loadQuestions);
 </script>
+
+<style scoped>
+.moderation-wrapper {
+    max-width: 900px;
+    margin: 0 auto; /* zentriert */
+}
+</style>

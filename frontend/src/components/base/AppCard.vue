@@ -1,5 +1,5 @@
 <template lang="">
-  <div class="container d-flex justify-content-center py-5">
+  <div class="container d-flex justify-content-center pt-5">
     <div class="card w-100 mb-3 rounded-5 shadow-lg" style="max-width: 800px;">
       <div class="card-header rounded-top-5">
         <slot name="header"></slot>
