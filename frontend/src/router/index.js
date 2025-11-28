@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "@/views/LoginView.vue";
 import DashboardView from "@/views/DashboardView.vue";
-import QuizStartView from "@/views/QuizStartView.vue";
 import SinglePlayerView from "@/views/SinglePlayerView.vue";
 import QuestionsView from "@/views/QuestionsView.vue";
 import AddQuestionView from "@/views/AddQuestionView.vue";
 import TeamView from "@/views/TeamView.vue";
-import JoinTeamView from "@/views/JoinTeamView.vue"; 
+import JoinTeamView from "@/views/JoinTeamView.vue";
+import SettingsView from "@/views/SettingsView.vue";
+import NotImplementedView from "@/views/NotImplementedView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,12 +22,6 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: DashboardView,
-      meta: { hideNavbar: false, requiresAuth: true },
-    },
-    {
-      path: "/startquiz",
-      name: "startquiz",
-      component: QuizStartView,
       meta: { hideNavbar: false, requiresAuth: true },
     },
     {
@@ -55,8 +50,20 @@ const router = createRouter({
     },
     {
       path: "/join-team",
-      name: "jointeam",                     
+      name: "jointeam",
       component: JoinTeamView,
+      meta: { hideNavbar: false, requiresAuth: true },
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: SettingsView,
+      meta: { hideNavbar: false, requiresAuth: true },
+    },
+        {
+      path: "/notimplemented",
+      name: "notimplemented",
+      component: NotImplementedView,
       meta: { hideNavbar: false, requiresAuth: true },
     },
     {

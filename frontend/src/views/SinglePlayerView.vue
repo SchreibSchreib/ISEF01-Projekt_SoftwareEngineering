@@ -1,6 +1,6 @@
 <template>
-    <div class="container py-4">
-        <h1 class="mb-4 pb-4">Hallo StudentXY!</h1>
+    <div class="container py-5">
+        <h1 class="fw-bold">Hallo {{ userStore.currentUser?.name }}</h1>
 
         <!-- Loading -->
         <div v-if="loading" class="text-center py-5">
@@ -18,33 +18,20 @@
 
             <template #body>
                 <div class="d-flex flex-column gap-3">
-                    <QuizCardButton
-                        v-for="(choice, index) in currentQuestion.choices"
-                        :key="`${currentIndex}-${choice.id}-${index}`"
-                        :state="answerClass(choice)"
-                        :disabled="answered"
-                        @click="selectAnswer(choice)"
-                    >
+                    <QuizCardButton v-for="(choice, index) in currentQuestion.choices"
+                        :key="`${currentIndex}-${choice.id}-${index}`" :state="answerClass(choice)" :disabled="answered"
+                        @click="selectAnswer(choice)">
                         <template #letter>{{ indexToLetter(index) }}</template>
                         <template #answer>{{ choice.text }}</template>
                     </QuizCardButton>
 
-                    <div
-                        class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3"
-                    >
+                    <div class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3">
                         <div class="flex-grow-1">
-                            <ExplainBox
-                                v-if="answered"
-                                :explanation="currentQuestion.correctAnswerExplanation"
-                            />
+                            <ExplainBox v-if="answered" :explanation="currentQuestion.correctAnswerExplanation" />
                         </div>
 
-                        <button
-                            class="btn border-3 rounded-3 px-4 py-2 fw-bold"
-                            style="height: 50px; width: 150px;"
-                            :disabled="!answered"
-                            @click="nextQuestion"
-                        >
+                        <button class="btn border-3 rounded-3 px-4 py-2 fw-bold" style="height: 50px; width: 150px;"
+                            :disabled="!answered" @click="nextQuestion">
                             {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
                         </button>
                     </div>
@@ -68,10 +55,7 @@
                     <button class="btn btn-primary px-4 py-2 fw-bold me-3" @click="restart">
                         Nochmal spielen
                     </button>
-                    <button
-                        class="btn btn-secondary px-4 py-2 fw-bold"
-                        @click="$router.push('/dashboard')"
-                    >
+                    <button class="btn btn-secondary px-4 py-2 fw-bold" @click="$router.push('/dashboard')">
                         Zurück zum Dashboard
                     </button>
                 </div>
@@ -82,6 +66,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { userStore } from "@/stores/userStore";
 import QuizCard from "@/components/base/AppCard.vue";
 import QuizCardButton from "@/components/base/QuizCardButton.vue";
 import ExplainBox from "@/components/base/ExplainBox.vue";
@@ -111,7 +96,7 @@ const isLastQuestion = computed(
 
 /* Antwort wählen + Backend-Call */
 async function selectAnswer(choice) {
-    if (answered.value) return; 
+    if (answered.value) return;
 
     selectedChoice.value = choice;
     answered.value = true;

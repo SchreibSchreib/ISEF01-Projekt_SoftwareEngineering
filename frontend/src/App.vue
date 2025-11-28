@@ -22,6 +22,7 @@
 import { useRoute } from 'vue-router';
 import { ref, onMounted, computed } from 'vue';
 import TheNavigationBar from './components/composed/TheNavigationBar.vue';
+import { userStore } from "@/stores/userStore";
 
 const route = useRoute();
 const isMobile = ref(false);
