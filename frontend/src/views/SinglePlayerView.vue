@@ -79,7 +79,6 @@ const finished = ref(false);
 onMounted(async () => {
     const response = await fetch("/api/questions/random/10");
     questions.value = await response.json();
-    console.log("RAW QUESTIONS:", JSON.stringify(questions.value, null, 2));
     loading.value = false;
 });
 

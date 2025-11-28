@@ -29,8 +29,7 @@
             <!--  RECHTER BEREICH: Antwort + Erklärung   -->
             <div class="col-12 col-lg-4 pt-0 pt-lg-5">
 
-                <!-- Korrekte Antwort -->
-                <AppBox :max="225" class="mb-4 mx-auto">
+                <AppBox :max="225" class="mt-5 mb-3 mx-auto">
                     <p class="fw-bold text-center">Welche Antwort ist korrekt?</p>
 
                     <div class="d-flex input-style flex-wrap justify-content-center gap-3 mt-3">
@@ -39,19 +38,17 @@
                     </div>
                 </AppBox>
 
-                <!-- Begründung -->
-                <div class=" mb-4">
+                <div class=" mb-2">
                     <p class="fw-bold mb-1">Begründung</p>
                     <AppInput class="form-control fs-5 border-3" placeholder="Hier eingeben" rows="4"
                         v-model="explanation">
                     </AppInput>
                 </div>
 
-                <!-- Speichern -->
-                <button class="btn btn-dark w-100 py-3 fw-bold save-btn" @click="saveQuestion">
+                <AppButton class="btn btn-dark rounded-3 w-100 mb-0 py-3 fw-bold save-btn" @click="saveQuestion">
                     Frage übernehmen
-                </button>
-
+                </AppButton>
+                <SuccessPanel :show="success" message="Frage erfolgreich eingereicht!" @hide="success = false" />
             </div>
         </div>
     </div>
@@ -64,12 +61,15 @@ import AppCard from "@/components/base/AppCard.vue";
 import AppInput from "@/components/base/AppInput.vue";
 import AppBox from "@/components/base/AppBox.vue";
 import ChoiceButton from "@/components/base/AppChoiceButton.vue";
+import SuccessPanel from "@/components/base/SuccessPanel.vue";
+import AppButton from "@/components/base/AppButton.vue";
 
 // Formular-Daten
 const newQuestion = ref("");
 const choices = ref({ A: "", B: "", C: "", D: "" });
 const correctAnswer = ref(null);
 const explanation = ref("");
+const success = ref(false);
 
 async function saveQuestion() {
     const payload = {
@@ -91,14 +91,22 @@ async function saveQuestion() {
         credentials: "include"
     });
 
-    if (!response.ok) {
+
+    if (response.ok) {
+        // Felder zurücksetzen
+        newQuestion.value = "";
+        choices.value = { A: "", B: "", C: "", D: "" };
+        correctAnswer.value = null;
+        explanation.value = "";
+        // Erfolgsmeldung anzeigen
+        success.value = true;
+    } else {
         console.error("Fehler beim Speichern", await response.text());
     }
 }
 </script>
 
 <style scoped>
-/* Eingabefelder links */
 .input-style {
     border-color: #1fa1a8 !important;
 }

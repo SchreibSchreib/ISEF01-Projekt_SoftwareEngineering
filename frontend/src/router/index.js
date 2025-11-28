@@ -8,6 +8,7 @@ import TeamView from "@/views/TeamView.vue";
 import JoinTeamView from "@/views/JoinTeamView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import NotImplementedView from "@/views/NotImplementedView.vue";
+import EvaluateQuestions from "@/views/EvaluateQuestions.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,7 +61,13 @@ const router = createRouter({
       component: SettingsView,
       meta: { hideNavbar: false, requiresAuth: true },
     },
-        {
+    {
+      path: "/evaluatequestions",
+      name: "evaluatequestions",
+      component: EvaluateQuestions,
+      meta: { hideNavbar: false, requiresAuth: true },
+    },
+    {
       path: "/notimplemented",
       name: "notimplemented",
       component: NotImplementedView,
