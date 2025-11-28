@@ -74,34 +74,29 @@ const success = ref(false);
 async function saveQuestion() {
     const payload = {
         text: newQuestion.value,
-        choices: {
-            A: choices.value.A,
-            B: choices.value.B,
-            C: choices.value.C,
-            D: choices.value.D,
-        },
-        correct: correctAnswer.value,
+        choiceA: choices.value.A,
+        choiceB: choices.value.B,
+        choiceC: choices.value.C,
+        choiceD: choices.value.D,
+        correctAnswer: correctAnswer.value,
         explanation: explanation.value
     };
 
-    const response = await fetch("/api/questions", {
+    const response = await fetch("/api/submitted-questions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
         credentials: "include"
     });
 
-
     if (response.ok) {
-        // Felder zurücksetzen
         newQuestion.value = "";
         choices.value = { A: "", B: "", C: "", D: "" };
         correctAnswer.value = null;
         explanation.value = "";
-        // Erfolgsmeldung anzeigen
         success.value = true;
     } else {
-        console.error("Fehler beim Speichern", await response.text());
+        console.error("Fehler beim Einreichen", await response.text());
     }
 }
 </script>
