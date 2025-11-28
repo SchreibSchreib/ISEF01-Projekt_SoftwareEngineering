@@ -6,7 +6,7 @@
         <template #body>
             <AppButton class="fs-3 fw-bold rounded-4 mt-4 mb-3" @click="navigateAddQuestion">Fragenkatalog erweitern
             </AppButton>
-            <AppButton class="fs-3 fw-bold rounded-4 mt-3 mb-4" @click="navigateNotImplemented">Neue Frage bewerten
+            <AppButton class="fs-3 fw-bold rounded-4 mt-3 mb-4" @click="navigateEvaluateQuestions">Neue Frage bewerten
             </AppButton>
         </template>
     </AppCard>
@@ -21,8 +21,8 @@ function navigateAddQuestion() {
     router.push({ name: 'addquestion' });
 }
 
-function navigateNotImplemented() {
-    router.push({ name: 'notimplemented' });
+function navigateEvaluateQuestions() {
+    router.push({ name: 'evaluatequestions' });
 }
 
 </script>

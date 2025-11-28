@@ -47,6 +47,9 @@ onMounted(() => {
 
 async function handleLogin() {
 
+  userStore.currentUser = null;
+  userStore.isLoaded = false;
+
   const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
   if (!token) {
     errorMessage.value = "Bitte bestätige das Captcha.";
@@ -72,16 +75,13 @@ async function handleLogin() {
       return;
     }
 
-    userStore.currentUser = null;
-    userStore.isLoaded = false;
-
     const meRes = await fetch("/api/users/me", {
       credentials: "include"
     });
 
     if (meRes.ok) {
-      userStore.currentUser = await meRes.json();
-      userStore.isLoaded = true;
+      const user = await meRes.json();
+      userStore.setUser(user);
     }
 
     router.push({ name: "dashboard" });
