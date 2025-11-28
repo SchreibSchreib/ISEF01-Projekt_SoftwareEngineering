@@ -8,7 +8,7 @@ import TeamView from "@/views/TeamView.vue";
 import JoinTeamView from "@/views/JoinTeamView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import NotImplementedView from "@/views/NotImplementedView.vue";
-import EvaluateQuestions from "@/views/EvaluateQuestions.vue";
+import EvaluateQuestions from "@/views/EvaluateQuestionsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
