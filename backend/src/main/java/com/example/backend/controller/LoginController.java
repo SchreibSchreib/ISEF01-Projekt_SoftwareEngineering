@@ -44,7 +44,7 @@ public class LoginController {
                     .body(Map.of("message", "Zu viele Fehlversuche. Bitte versuchen Sie es später erneut."));
         }
 
-        // ⭐ NEU → Captcha nur prüfen, wenn NICHT localhost
+        // Captcha nur prüfen, wenn NICHT localhost
         if (!isLocalRequest(http)) {
             // Captcha prüfen
             if (!verifyCaptcha(request.getCaptchaToken())) {
@@ -87,7 +87,7 @@ public class LoginController {
         return result != null && result.isSuccess();
     }
 
-    // ⭐ NEU: Methode bestimmt, ob Request lokal ist
+    // Methode bestimmt, ob Request lokal ist
     private boolean isLocalRequest(HttpServletRequest request) {
         String host = request.getServerName();
         return "localhost".equals(host) || "127.0.0.1".equals(host);

@@ -114,7 +114,7 @@ const sessionCode = ref("");
 const teamName = ref("");
 const members = ref([]); // [{ id, name, points }]
 
-// 🔹 neu: Team-ID merken für Chat-Requests
+// Team-ID merken für Chat-Requests
 const teamId = ref(null);
 
 // Chat
@@ -193,7 +193,7 @@ function mapTeamToState(team) {
   });
 }
 
-// 🔹 Nachrichten vom Backend laden
+// Nachrichten vom Backend laden
 async function loadMessages() {
   if (!teamId.value) return;
 
@@ -220,7 +220,7 @@ async function loadMessages() {
   }
 }
 
-// 🔹 Nachricht senden
+// Nachricht senden
 async function sendMessage() {
   const text = currentMessage.value.trim();
   if (!text || !teamId.value || !currentUserId.value) return;
