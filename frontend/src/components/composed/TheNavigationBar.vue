@@ -1,5 +1,5 @@
 <template>
-  <!-- 🔹 Navbar für kleine Bildschirme) -->
+  <!-- Navbar für kleine Bildschirme -->
   <nav class="navbar navbar-expand-lg d-md-none fixed-top py-0 border-0 shadow-none">
     <div class="container-fluid px-0">
       <button class="navbar-toggler m-2" type="button" data-bs-toggle="collapse"
@@ -31,7 +31,7 @@
     </div>
   </nav>
 
-  <!-- 🔹 Fixierte Sidebar für große Bildschirme -->
+  <!-- Fixierte Sidebar für große Bildschirme -->
   <nav class="navbar navbar-expand-md flex-column vh-100 position-fixed d-none d-md-flex  ">
     <div class="container-fluid flex-column h-100 pt-5 pb-5 pe-0">
       <ul class="navbar-nav flex-column ps-3 w-100 h-100">
