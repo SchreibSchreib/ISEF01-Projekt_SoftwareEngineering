@@ -28,6 +28,6 @@ npm run dev
 
 ## Team
 - [SchreibSchreib](https://github.com/SchreibSchreib)
--[NilsKlaIU](https://github.com/NilsKlaIU)
+- [NilsKlaIU](https://github.com/NilsKlaIU)
 - [jetkIU](https://github.com/jetkIU)
 - [sz1707](https://github.com/sz1707)
