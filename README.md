@@ -3,14 +3,14 @@
 Dieses Projekt ist ein webbasiertes Quizsystem, welches gemeinsames Lernen unterstützt. 
 Nutzer können Fragen erstellen, beantworten und im Team Punkte sammeln. Die Anwendung wurde im Rahmen des Moduls „Projekt Software Engineering (ISEF01)“ entwickelt.
 
-## Die Anwendung ist unter [quizapp1.de](https://quizapp1.de) erreichbar.
+### Die Anwendung ist unter [quizapp1.de](https://quizapp1.de) erreichbar.
 
 ## Tech-Stack
-Frontend: Vue.js, Bootstrap
-Backend: Spring Boot (Java)
-Datenbank: MySQL
-Hosting: Netcup-Server
-Versionierung: GitHub
+- Frontend: Vue.js, Bootstrap
+- Backend: Spring Boot (Java)
+- Datenbank: MariaDB
+- Hosting: Netcup-Server
+- Versionierung: GitHub
 
 ## Projektstruktur
 backend/     -> Spring Boot Anwendung (API, Models, Services)
