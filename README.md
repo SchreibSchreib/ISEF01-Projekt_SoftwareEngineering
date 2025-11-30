@@ -13,8 +13,8 @@ Nutzer können Fragen erstellen, beantworten und im Team Punkte sammeln. Die Anw
 - Versionierung: GitHub
 
 ## Projektstruktur
-backend/     -> Spring Boot Anwendung (API, Models, Services)
-frontend/    -> Vue.js Anwendung (UI, Views, Komponenten)
+- backend/     -> Spring Boot Anwendung (API, Models, Services)
+- frontend/    -> Vue.js Anwendung (UI, Views, Komponenten)
 
 ## Lokale Ausführung
 Backend starten:
