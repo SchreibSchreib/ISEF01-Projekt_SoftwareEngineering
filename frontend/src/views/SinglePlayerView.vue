@@ -18,21 +18,32 @@
 
             <template #body>
                 <div class="d-flex flex-column gap-3">
-                    <QuizCardButton v-for="(choice, index) in currentQuestion.choices"
-                        :key="`${currentIndex}-${choice.id}-${index}`" :state="answerClass(choice)" :disabled="answered"
-                        @click="selectAnswer(choice)">
+                    <QuizCardButton
+                        v-for="(choice, index) in currentQuestion.choices"
+                        :key="`${currentIndex}-${choice.id}-${index}`"
+                        :state="answerClass(choice)"
+                        :disabled="answered"
+                        @click="selectAnswer(choice)"
+                    >
                         <template #letter>{{ indexToLetter(index) }}</template>
                         <template #answer>{{ choice.text }}</template>
                     </QuizCardButton>
 
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-md-center mt-4 gap-3">
                         <div class="flex-grow-1">
-                            <ExplainBox v-if="answered" :explanation="currentQuestion.correctAnswerExplanation" />
+                            <ExplainBox
+                                v-if="answered"
+                                :explanation="currentQuestion.correctAnswerExplanation"
+                            />
                         </div>
 
-                        <button class="btn border-3 rounded-3 px-4 py-2 fw-bold" style="height: 50px; width: 150px;"
-                            :disabled="!answered" @click="nextQuestion">
-                            {{ isLastQuestion ? 'Ergebnis' : 'Weiter' }}
+                        <button
+                            class="btn border-3 rounded-3 px-4 py-2 fw-bold"
+                            style="height: 50px; width: 150px;"
+                            :disabled="!answered"
+                            @click="nextQuestion"
+                        >
+                            {{ isLastQuestion ? "Ergebnis" : "Weiter" }}
                         </button>
                     </div>
                 </div>
@@ -55,7 +66,10 @@
                     <button class="btn btn-primary px-4 py-2 fw-bold me-3" @click="restart">
                         Nochmal spielen
                     </button>
-                    <button class="btn btn-secondary px-4 py-2 fw-bold" @click="$router.push('/dashboard')">
+                    <button
+                        class="btn btn-secondary px-4 py-2 fw-bold"
+                        @click="$router.push('/dashboard')"
+                    >
                         Zurück zum Dashboard
                     </button>
                 </div>
@@ -80,6 +94,13 @@ onMounted(async () => {
     const response = await fetch("/api/questions/random/10");
     questions.value = await response.json();
     loading.value = false;
+
+    if (userStore.currentUser?.userId) {
+        localStorage.setItem("userId", String(userStore.currentUser.userId));
+        console.log("userId in localStorage gesetzt:", userStore.currentUser.userId);
+    } else {
+        console.warn("currentUser im Store ist leer oder hat keine userId:", userStore.currentUser);
+    }
 });
 
 /* Quiz State */
@@ -113,7 +134,9 @@ async function selectAnswer(choice) {
     const userId = localStorage.getItem("userId");
 
     if (!userId) {
-        console.warn("Kein userId in localStorage gefunden – Antwort wird nicht getrackt.");
+        console.warn(
+            "Kein userId in localStorage gefunden – Antwort wird nicht getrackt."
+        );
         return;
     }
 
@@ -125,18 +148,21 @@ async function selectAnswer(choice) {
             body: JSON.stringify({
                 questionId: currentQuestion.value.id, // ggf. an dein Feld anpassen
                 choiceId: choice.id,
-                correct: isCorrect
-            })
+                correct: isCorrect,
+            }),
         });
 
         if (!response.ok) {
-            console.error("Fehler beim Antworten:", response.status, response.statusText);
+            console.error(
+                "Fehler beim Antworten:",
+                response.status,
+                response.statusText
+            );
             return;
         }
 
         const data = await response.json();
         console.log("AnswerResponse:", data);
-
     } catch (err) {
         console.error("Fehler beim Senden der Antwort:", err);
     }
