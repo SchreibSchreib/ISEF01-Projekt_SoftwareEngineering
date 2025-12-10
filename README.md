@@ -17,7 +17,7 @@ Nutzer können Fragen erstellen, beantworten und im Team Punkte sammeln. Die Anw
 - frontend/    -> Vue.js Anwendung (UI, Views, Komponenten)
 
 ## Lokale Ausführung
-- Backend starten:
+Backend starten:
 - cd backend
 - ./mvn spring-boot:run
 
