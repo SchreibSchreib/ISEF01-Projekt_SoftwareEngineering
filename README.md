@@ -21,7 +21,7 @@ Backend starten:
 cd backend
 ./mvn spring-boot:run
 
-## Frontend starten:
+Frontend starten:
 cd frontend
 npm install
 npm run dev
